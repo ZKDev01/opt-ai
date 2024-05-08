@@ -4,23 +4,13 @@ import dotenv
 
 import PIL.Image
 
-import re
-import tqdm
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
 
 import google.generativeai as genai
-import google.ai.generativelanguage as glm
 
 from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
-
-from sklearn.datasets import fetch_20newsgroups
-from sklearn.manifold import TSNE
-from sklearn.cluster import KMeans
-from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 
 dotenv.load_dotenv()
 telegram_token = os.getenv("telegram_token") 

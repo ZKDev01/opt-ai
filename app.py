@@ -2,6 +2,8 @@ import os
 import textwrap 
 import dotenv
 
+import PIL.Image
+
 import numpy as np
 import pandas as pd
 
@@ -39,8 +41,8 @@ df = pd.DataFrame(database)
 df.columns = ['Title', 'Text']
 df['Embeddings'] = df.apply(lambda row: embed(row['Title'], row['Text']), axis=1)
 
-df.to_json(os.getcwd() + "\\database\\database.json")
-sdsd
+# df.to_json(os.getcwd() + "\\database\\database.json")
+
 def find_best_passage(query, dataframe):
   query_embedding = genai.embed_content(
     model=model_embedding,
@@ -64,10 +66,6 @@ def make_prompt(query, relevant_passage: str):
     """).format(query=query, relevant_passage=escaped)
 
   return prompt
-
-def hello():
-  testing = "10"
-  print(testing)
 
 # commands
 async def start(update: Update, context: ContextTypes):

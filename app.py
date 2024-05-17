@@ -12,6 +12,8 @@ import google.generativeai as genai
 from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
 
+dsdsdsdsd
+
 dotenv.load_dotenv()
 telegram_token = os.getenv("telegram_token") 
 telegram_username = os.getenv("telegram_username")

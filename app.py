@@ -65,6 +65,10 @@ def make_prompt(query, relevant_passage: str):
 
   return prompt
 
+def hello():
+  testing = "10"
+  print(testing)
+
 # commands
 async def start(update: Update, context: ContextTypes):
   await update.message.reply_text("Hola, soy un bot. Está en fase de prueba")

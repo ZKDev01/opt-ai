@@ -2,8 +2,6 @@ import os
 import textwrap 
 import dotenv
 
-import PIL.Image
-
 import numpy as np
 import pandas as pd
 
@@ -11,8 +9,6 @@ import google.generativeai as genai
 
 from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
-
-dsdsdsdsd
 
 dotenv.load_dotenv()
 telegram_token = os.getenv("telegram_token") 
@@ -43,8 +39,8 @@ df = pd.DataFrame(database)
 df.columns = ['Title', 'Text']
 df['Embeddings'] = df.apply(lambda row: embed(row['Title'], row['Text']), axis=1)
 
-# df.to_json(os.getcwd() + "\\database\\database.json")
-
+df.to_json(os.getcwd() + "\\database\\database.json")
+sdsd
 def find_best_passage(query, dataframe):
   query_embedding = genai.embed_content(
     model=model_embedding,

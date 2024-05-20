@@ -12,10 +12,11 @@ import google.generativeai as genai
 from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
 
-dotenv.load_dotenv()
-telegram_token = os.getenv("telegram_token") 
-telegram_username = os.getenv("telegram_username")
-geminiapi_key = os.getenv("geminiapi_key")
+import load_env as lenv
+telegram_token = lenv.telegram_token
+telegram_username = lenv.telegram_username
+geminiapi_key = lenv.geminiapi_key
+
 
 genai.configure(api_key=geminiapi_key)
 model = genai.GenerativeModel('gemini-pro')
@@ -24,24 +25,7 @@ model_embedding = 'models/embedding-001'
 original = os.getcwd() + "\\database\\doc"
 dirs = os.listdir(original)
 
-database = []
-for dir in dirs:
-  with open(original + '\\' + dir, encoding='utf-8') as file:
-    result = file.read()
-  database.append((dir, result))
-
-def embed(title, text):
-  return genai.embed_content(
-    model=model_embedding,
-    content=text,
-    task_type="retrieval_document",
-    title=title)["embedding"]
-
-df = pd.DataFrame(database)
-df.columns = ['Title', 'Text']
-df['Embeddings'] = df.apply(lambda row: embed(row['Title'], row['Text']), axis=1)
-
-# df.to_json(os.getcwd() + "\\database\\database.json")
+df = pd.read_json("./database/database.json")
 
 def find_best_passage(query, dataframe):
   query_embedding = genai.embed_content(
@@ -61,10 +45,10 @@ def make_prompt(query, relevant_passage: str):
     Si el pasaje no es relevante para la respuesta no respondas la pregunta \
     QUESTION: '{query}'
     PASSAGE: '{relevant_passage}'
-
+    
     ANSWER:
     """).format(query=query, relevant_passage=escaped)
-
+  
   return prompt
 
 # commands

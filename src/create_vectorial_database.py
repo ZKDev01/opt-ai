@@ -1,6 +1,7 @@
+import src.load_env as lenv 
+
 import os
 import google.generativeai as genai 
-import load_env as lenv 
 import pandas as pd 
 
 geminiapi_key = lenv.geminiapi_key

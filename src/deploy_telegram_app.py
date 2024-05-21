@@ -12,11 +12,10 @@ import google.generativeai as genai
 from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
 
-import load_env as lenv
+import src.load_env as lenv
 telegram_token = lenv.telegram_token
 telegram_username = lenv.telegram_username
 geminiapi_key = lenv.geminiapi_key
-
 
 genai.configure(api_key=geminiapi_key)
 model = genai.GenerativeModel('gemini-pro')

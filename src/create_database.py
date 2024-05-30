@@ -1,16 +1,20 @@
 import os
 
-import load_env as lenv 
+import load_env as lenv
 
+from typing import List
 from pymongo import MongoClient
 
-# from langchain_community.document_loaders import 
-from langchain.text_splitter import MarkdownHeaderTextSplitter
+from langchain_google_genai import GoogleGenerativeAIEmbeddings
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_core.documents import Document
 
-def main():
+def main(clear: bool = True):
   client = MongoClient(lenv.mongodb_client)
   db = client[lenv.mongodb_name]
   collection = db[lenv.mongodb_collection]
+  if clear:
+    clear_database(collection)
   run = create_vectors(collection)
   if run:
     print("BASE DE DATOS CREADA") 
@@ -21,18 +25,11 @@ def create_vectors(collection):
   dirs = load_mds_dir()
   for dir in dirs:
     content = load_content(dir)
+    chunks = chunkenizer(content)
+    chunks = to_embedding(chunks, dir)
+    add_chunks_in_database(chunks, collection)
+  return True
 
-  return 
-  # TARGET
-  dir = '' 
-  chunks = load_doc(dir)
-  # for every chunk
-  chunk = dir
-  embedding = to_embedding(chunks)
-  obj = convert_obj(chunk, embedding)
-  add_vector(obj, collection)
-
-  pass
 
 def load_mds_dir() -> list[str]:
   # TODO OK
@@ -41,46 +38,49 @@ def load_mds_dir() -> list[str]:
   return dirs
 
 def load_content(dir: str):
-  # TODO OK
   content = ''
   with open(dir, 'r', encoding='utf-8') as file:
     content = file.read()
   return content
 
 def chunkenizer(content: str):
-  headers_to_split_on = [
-    ("#", "H1"),
-    ("##", "H2"),
-    ("###", "H3"),
-    ("####", "H4"),
-    ("#####", "H5")]
+  text_splitter = RecursiveCharacterTextSplitter(
+    chunk_size = 1024,
+    chunk_overlap = 204,
+    length_function = len,
+    is_separator_regex=False
+  )
+  chunks = text_splitter.create_documents([content])
+  return chunks
   
-  md_splitter = MarkdownHeaderTextSplitter(headers_to_split_on=headers_to_split_on)
-  chunks = md_splitter.split_text(content)
-  
+def embed():
+  f = GoogleGenerativeAIEmbeddings(
+    google_api_key=lenv.geminiapi_key,
+    model=lenv.model_embedding
+  )
+  return f
+
+def to_embedding(chunks: List[Document], doc: str):
+  embedding = embed()
+  embed_chunk = []
   for chunk in chunks:
-    print("----------------")
-    print(chunk)
-  
-def to_embedding(chunks: str):
-  # embedding chunks
-  pass
+    embed_chunk.append({
+      'document': doc, 
+      'chunk': chunk.page_content, 
+      'embedding': embedding.embed_query(chunk.page_content)
+    })
+  return embed_chunk
 
-def convert_obj(chunk: str, embedding: str):
-  pass
+def add_chunks_in_database(chunks, collection):
+  for chunk in chunks:
+    collection.insert_one(chunk)
 
-def add_vector(obj, collection):
-  collection.insert_one({
-    'element1': 10,
-    'element2': 11
-  })
-
-def clear_database():
-  pass
+def clear_database(collection):
+  result = collection.drop()
+  if result:
+    print("La coleccion ha sido eliminada")
+  else:
+    print("No se pudo eliminar la coleccion")
 
 if __name__ == "__main__":
-  # main()
-  dirs = load_mds_dir()
-  content = load_content(dirs[0])
-  chunkenizer(content)
-  
+  main()

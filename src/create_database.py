@@ -1,27 +1,29 @@
 import os
 
 import load_env as lenv
+import google.generativeai as genai
 
 from typing import List
 from pymongo import MongoClient
 
-from langchain_google_genai import GoogleGenerativeAIEmbeddings
+# from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_core.documents import Document
 
-def main(clear: bool = True):
-  client = MongoClient(lenv.mongodb_client)
-  db = client[lenv.mongodb_name]
-  collection = db[lenv.mongodb_collection]
-  if clear:
-    clear_database(collection)
-  run = create_vectors(collection)
-  if run:
-    print("BASE DE DATOS CREADA") 
-  else:
-    print("ERROR") 
+client = MongoClient(lenv.mongodb_client)
+db = client[lenv.mongodb_name]
+collection = db[lenv.mongodb_collection]
 
-def create_vectors(collection):
+geminiapi_key = lenv.geminiapi_key
+model_embedding = lenv.model_embedding
+genai.configure(api_key=geminiapi_key)
+
+def main(clear: bool = True):
+  if clear:
+    clear_database()
+  create_vectors()
+
+def create_vectors():
   dirs = load_mds_dir()
   for dir in dirs:
     content = load_content(dir)
@@ -30,9 +32,7 @@ def create_vectors(collection):
     add_chunks_in_database(chunks, collection)
   return True
 
-
 def load_mds_dir() -> list[str]:
-  # TODO OK
   dirs =  os.listdir(lenv.data_path)
   dirs = [(lenv.data_path + "\\" + dir) for dir in dirs]
   return dirs
@@ -52,22 +52,22 @@ def chunkenizer(content: str):
   )
   chunks = text_splitter.create_documents([content])
   return chunks
-  
-def embed():
-  f = GoogleGenerativeAIEmbeddings(
-    google_api_key=lenv.geminiapi_key,
-    model=lenv.model_embedding
+
+def embed(text):
+  f = genai.embed_content(
+    model=model_embedding,
+    content=text,
+    task_type="retrieval_document"
   )
   return f
 
 def to_embedding(chunks: List[Document], doc: str):
-  embedding = embed()
   embed_chunk = []
   for chunk in chunks:
     embed_chunk.append({
       'document': doc, 
       'chunk': chunk.page_content, 
-      'embedding': embedding.embed_query(chunk.page_content)
+      'embedding': embed(chunk.page_content)
     })
   return embed_chunk
 
@@ -75,12 +75,8 @@ def add_chunks_in_database(chunks, collection):
   for chunk in chunks:
     collection.insert_one(chunk)
 
-def clear_database(collection):
-  result = collection.drop()
-  if result:
-    print("La coleccion ha sido eliminada")
-  else:
-    print("No se pudo eliminar la coleccion")
+def clear_database():
+  collection.drop()
 
 if __name__ == "__main__":
   main()

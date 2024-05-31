@@ -40,5 +40,5 @@ def test_convert_obj():
 
 
 if __name__ == '__main__':
-  test_convert_obj()
+  testing_embedding()
   pass

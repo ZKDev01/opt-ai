@@ -14,9 +14,9 @@ from pymongo import MongoClient
 
 def main():
   df = load_collection()
-  print(df)
+  print(df.head())
 
-def load_collection():
+def load_collection() -> pd.DataFrame:
   client = MongoClient(lenv.mongodb_client)
   db = client[lenv.mongodb_name]
   collection = db[lenv.mongodb_collection]
@@ -26,3 +26,4 @@ def load_collection():
 
 if __name__ == '__main__':
   main()
+  

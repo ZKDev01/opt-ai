@@ -19,9 +19,11 @@ from telegram.ext import Application, CommandHandler, MessageHandler, filters, C
 from llm_method import make_prompt, find_best_passage
 from utils_method import load_collection
 
+genai.configure(api_key=lenv.geminiapi_key)
 model = genai.GenerativeModel(lenv.model_llm)
+
 df = load_collection()
-  
+
 # COMMANDS
 async def start(update: Update, context: ContextTypes):
   await update.message.reply_text("Hola, soy un bot. Está en fase de prueba")
@@ -30,10 +32,16 @@ async def help(update: Update, context: ContextTypes):
 
 def handle_response(text: str, context: ContextTypes, update: Update):
   query = text.lower()
+  
   passage = find_best_passage(query, df)
   
+  print("CODIGO EJECUTADO HASTA EL MOMENTO HASTA AQUI?")
+  print(passage)
+
   prompt = make_prompt(query, passage)
   answer = model.generate_content(prompt)
+
+  print("HERE!!!!!")
 
   return answer.text
 

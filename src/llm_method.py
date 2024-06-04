@@ -7,15 +7,24 @@ import google.generativeai as genai
 
 from typing import List 
 
+genai.configure(api_key=lenv.geminiapi_key)
+
 def find_best_passage(query: str, df: pd.DataFrame, k=1):
   query_embedding = genai.embed_content(
     model=lenv.model_embedding,
     content=query,
     task_type="retrieval_query"
   )
-  dot_products = np.dot(np.stack(df['Embeddings']), query_embedding["embedding"])
+
+  print("QUERY EMBEDDING")
+  print(query_embedding['embedding'])
+  
+  print("DATAFRAME EMBEDDING")
+  print(np.stack(df['embedding']))
+
+  dot_products = np.dot(np.stack(df['embedding']), query_embedding["embedding"])
   idx = np.argmax(dot_products)
-  return df.iloc[idx]['Text']
+  return df.iloc[idx]['chunk']
 
 def clean_passages(passage: str):
   passage = passage.replace("'", "").replace('"', "").replace("\n", " ").lower()
@@ -31,22 +40,22 @@ def make_unique_passage(passages: List[str]):
 def make_prompt(query, relevant_passages: List[str]):
   relevant_passages = [clean_passages(relevant_passage) for relevant_passage in relevant_passages]
   prompt = f"""
-Eres un bot útil e informativo que responde preguntas utilizando texto del pasaje de referencia incluido a continuación \
+  Eres un bot útil e informativo que responde preguntas utilizando texto del pasaje de referencia incluido a continuación \
   
-Asegúrate de responder incluyendo toda la información relevante. \
+  Asegúrate de responder incluyendo toda la información relevante. \
   
-Asegúrate de desglosar conceptos complicaados y mantener un tono amigable y conversacional \
+  Asegúrate de desglosar conceptos complicaados y mantener un tono amigable y conversacional \
   
-Si el pasaje no es relevante para la respuesta no respondas la pregunta \
+  Si el pasaje no es relevante para la respuesta no respondas la pregunta \
   
 
-QUESTION: '{query}'
+  QUESTION: '{query}'
   
-PASSAGES:
-{make_unique_passage(relevant_passages)}
-ANSWER:
-"""
-  print(prompt)
+  PASSAGES:
+  {make_unique_passage(relevant_passages)}
+  ANSWER:
+  """
+  return prompt
 
 def __testing_module1():
   query = 'Hola Mundo'

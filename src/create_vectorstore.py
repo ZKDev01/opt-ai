@@ -1,38 +1,29 @@
 from typing import List
-import dotenv
+from tools import get_model, get_embedding
 import os
 
-from langchain_google_genai import GoogleGenerativeAI, GoogleGenerativeAIEmbeddings
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain_community.document_loaders import TextLoader
 from langchain_community.vectorstores.faiss import FAISS
 from langchain_core.documents import Document
 
-dotenv.load_dotenv()
-os.environ.setdefault('google_api_key', os.getenv('google_api_key')) 
-
-llm_model = 'models/gemini-1.5-pro'
-llm_embedding = 'models/embedding-001'
-
-model = GoogleGenerativeAI(
-  model=llm_model
-)
-embedding = GoogleGenerativeAIEmbeddings(
-  model=llm_embedding
-)
+model = get_model()
+embedding = get_embedding()
 
 current = os.getcwd()
-doc_dir = '\\database\\doc'
+doc_dir = '\\database\\docs-md'
+faiss_dir = '\\database\\faiss'
 
 DATA_PATH = current + doc_dir
+FAISS_PATH = current + faiss_dir
+
 dir = os.listdir(DATA_PATH)
 
-def search_docs():
+def search_docs() -> list[str]:
   docs_dir = os.listdir(DATA_PATH)
   docs_dir = [DATA_PATH + '\\' + item for item in docs_dir]
   return docs_dir
 
-def load_contents(docs_dir: list[str]):
+def load_contents(docs_dir: list[str]) -> list[str]:
   def load_content(doc_dir: str):
     content = ''
     with open(doc_dir, 'r', encoding='utf-8') as file:
@@ -41,7 +32,7 @@ def load_contents(docs_dir: list[str]):
   docs_content = [load_content(doc_dir=doc_dir) for doc_dir in docs_dir]
   return docs_content 
 
-def chunkenizer(content: str):
+def chunkenizer(content: str) -> List[Document]:
   text_splitter = RecursiveCharacterTextSplitter(
     chunk_size = 1024,
     chunk_overlap = 204,
@@ -50,7 +41,7 @@ def chunkenizer(content: str):
   chunks = text_splitter.create_documents([content])
   return chunks
 
-def create_chunks():
+def create_chunks() -> List[Document]:
   docs_dir = search_docs()
   docs_content = load_contents(docs_dir)
   chunks: List[Document] = []
@@ -60,27 +51,58 @@ def create_chunks():
   return chunks
 
 class FAISS_VECTORSTORE():
-  def __init__(self) -> None:
-    chunks = create_chunks()
-    self.vs = FAISS.from_documents(
-      documents=chunks, 
-      embedding=embedding)
-  def add_document_to_vectorstore():
-    pass
-  def del_document_from_vectorstore():
-    pass
-  def del_documents_from_vectorstore():
-    pass
+
+  def __init__(self, load: bool = False) -> None:
+    if load: 
+      self.__vs = FAISS.load_local(
+        folder_path=FAISS_PATH, 
+        embeddings=embedding,
+        allow_dangerous_deserialization=True)
+    else:
+      chunks = create_chunks()
+      self.__vs = FAISS.from_documents(
+        documents=chunks[0:100], 
+        embedding=embedding)
+      
+      i = 101
+      while True:
+        if i >= len(chunks):
+          break
+        if i + 99 >= len(chunks):
+          extension = FAISS.from_documents(
+            documents=chunks[i:len(chunks)],
+            embedding=embedding
+          )
+          self.__vs.merge_from(extension)
+          break
+        extension = FAISS.from_documents(
+          documents=chunks[i:i+99],
+          embedding=embedding
+        )
+        i=i+100
+      self.__vs.save_local(FAISS_PATH)
+
+  def similarity_search(self, query: str, k: int = 3):
+    if not k > 0:
+      raise Exception("k no puede ser negativo ni 0")
+    results = self.__vs.similarity_search(query=query, k=k)
+    results_content = [result.page_content for result in results]
+    return results_content
 
 class MONGODB_VECTORSTORE():
   pass
 
-def testing_faiss():
-  vectorstore = FAISS_VECTORSTORE()
-  query = "Que son los arboles?"
-  results = vectorstore.vs.similarity_search(query, k=1)
-  for result in results:
-    print(f"RESULTADO: {result}")
+# METODOS DE PRUEBA
+
+def testing_create_vectorstore():
+  FAISS_VECTORSTORE()
+
+def testing_load_and_query_something():
+  vs = FAISS_VECTORSTORE(load=True)
+  result = vs.similarity_search(query='que es la apologetica', k=10)
+  for item in result:
+    print(item)
 
 if __name__ == "__main__":
-  pass
+  testing_load_and_query_something()
+

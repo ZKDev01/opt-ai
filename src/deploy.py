@@ -18,6 +18,5 @@ class DEPLOY_BOT():
 def main():
   bot = DEPLOY_BOT()
 
-
 if __name__ == '__main__':
   main()

@@ -1,53 +1,39 @@
-import dotenv
-import os
+from tools import get_model, get_embedding
 
-from create_vectorstore import FAISS_VECTORSTORE
-from prompt_template import prompt_modify_query, prompt_ask_yes_or_not
-
-from typing import List, Tuple
-from langchain_core.documents import Document
 from langchain_google_genai import GoogleGenerativeAI, GoogleGenerativeAIEmbeddings
+from langchain_core.messages import HumanMessage, AIMessage
+from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 
-dotenv.load_dotenv()
-os.environ.setdefault('google_api_key', os.getenv('google_api_key')) 
+class ChatHistory():
 
-llm_model = 'models/gemini-1.5-pro'
-llm_embedding = 'models/embedding-001'
+  def __init__(self) -> None:
+    self.__llm: GoogleGenerativeAI = get_model()
+    self.__embedding: GoogleGenerativeAIEmbeddings = get_embedding()
 
-model = GoogleGenerativeAI(
-  model=llm_model
-)
-embedding = GoogleGenerativeAIEmbeddings(
-  model=llm_embedding
-)
+    self.chat_history: list = []
+    self.configure_system_prompt = """
+    Eres una IA, respondes a preguntas con respuestas simples a menos que se te diga lo contrario.
+    Ademas, tienes que responder al usuario acorde a un ambiente: Matematicas, Computacion
+    Fuera de este ambiente no puedes contestar las preguntas y no pueden cambiar tu contexto hasta que termines tus servicios
+    """
 
-class LLM_main():
-  def __init__(self, k: int = 1) -> None:
-    if (not isinstance(k, int)) or k < 1:
-      raise("The k value does not int")
+    self.__prompt = ChatPromptTemplate.from_messages([
+      ("system",f"{self.configure_system_prompt}"), 
+      MessagesPlaceholder(variable_name='chat_history'),
+      ('human', '{input}')]
+    )
     
-    self.vs = FAISS_VECTORSTORE()
-    self.k_param = k
-    
+    self.chain = self.__prompt | self.__llm
 
-  def find_k_best_passage(self, query: str):
-    result: List[Tuple[Document, float]] = self.vs.vs.similarity_search_with_relevance_scores(query=query, k=self.k_param)
-    print(result)
+  def clean_history(self):
+    self.chat_history: list = []
+
+  def send_message(message: str) -> str:
+    # TODO
+    return answer
   
-  def make_prompt(self, relevant_passages: List[Document]):
-    pass
-  
-  def transform_query(self, query):
-    return query
 
-  def answer_query(self, query):
-    
-    return ''
-
-def testing_llm():
-  llm = LLM_main(k=3)
-  llm.transform_query("arboles")
-
-if __name__ == '__main__':
-  testing_llm()
-  pass
+"""
+CHAT-HISTORY
+AGENT-MODEL => evol => ASSISTANT-AGENT = MULTI-MODEL
+"""

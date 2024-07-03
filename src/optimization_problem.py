@@ -109,28 +109,9 @@ class OptimizationQ_LLM(BaseHistory):
   def __init__(self) -> None:
     super().__init__()
     self.prompt = f"""
-    CAPACIDAD:
-    Eres una IA con una unica capacidad: resolver problemas de optimizacion. 
-    
-    INPUT: La entrada del usuario tiene que ser un problema de optimizacion no resuelto: definicion del problema y alguna tabla
-    
-    EJEMPLOS: A continuacion se presentan diferentes problemas de optimizacion que puedes usar para dar respuestas correctas.
-    
-    ejemplo 1:
-    ```
-    {problem_1}
-    ```
-    fin del ejemplo 1
-    
-    ejemplo 2:
-    ```
-    {problem_2}
-    ```
-    fin del ejemplo 2
-
-    OUTPUT: La salida tiene que abarcar las variables de decision, las restricciones y la funcion objetivo
+    Resuelves problemas de optimizacion
     """
-
+    self.chat = [problem_1, problem_2]
     self.make_chain()
 
 testing_1 = """
@@ -154,9 +135,11 @@ Se desea conocer la cantidad a fabricar de cada tipo de folleto de manera que el
 
 testing_2 = "Una empresa se dedica a producir dos tipos de folletos: blancos, negros, y para ello se utilizan 3 tipos de recursos: papel, color negro, color blanco, sello de tipo 1, sello de tipo 2  "
 
+testing_3 = "Dame un ejemplo de problema de optimizacion: Asignación de recursos con las variables de decision, restricciones, funcion objetivo"
+
 def main():
   opt = OptimizationQ_LLM()
-  response = opt.send_message(testing_1)
+  response = opt.send_message(testing_3)
   print(response)
 
 if __name__ == '__main__':

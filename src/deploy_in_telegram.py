@@ -1,4 +1,4 @@
-from llm import LLM_main
+from testing_code.llm import LLM_main
 
 from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, ContextTypes, filters

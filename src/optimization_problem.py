@@ -18,6 +18,8 @@ Los tres elementos que definen una solucion a un problema de programación linea
 
 # PROBLEMA: ASIGNACION DE RECURSOS
 problem_1 = """
+INPUT: 
+
 PROBLEMA: Asignación de recursos
 
 DESCRIPCION:
@@ -32,6 +34,8 @@ TABLA:
 | Malta           | 1     | 2     | 2    | 30             |
 | Levadura        | 2     | 1     | 2    | 45             |
 | Precio de venta | 7     | 4     | 3    |                |
+
+OUTPUT:
 
 VARIABLES DE DECISION:
 Del enunciado del problema se desprende que las variables de decisión son las producciones a fabricar de cada tipo de cerveza:
@@ -57,6 +61,8 @@ max z = 7x_1 + 4x_2 + 3x_3
 
 # PROBLEMA GENERALIZADO: ASIGNACION DE RECURSOS
 problem_2 = """
+INPUT:
+
 PROBLEMA: Asignación de recursos generalizado
 
 DESCRIPCION:
@@ -72,6 +78,8 @@ TABLA:
 | ...                                      | ... | ... | ... | ... | ...                              |
 | m                                        | cm1 | cm2 | ... | cmn | bm                               |
 | Contribucion a z por unidad de actividad | c1  | c2  | ... | cn  |                                  |
+
+OUTPUT:
 
 VARIABLES DE DECISION:
 
@@ -97,30 +105,40 @@ max z = c1 * x1 + c2 * x2 + ... + cn * xn
 
 # PROBLEMA DEL VIAJANTE
 
-
 class OptimizationQ_LLM(BaseHistory):
   def __init__(self) -> None:
     super().__init__()
     self.prompt = f"""
-    Eres una IA capaz de resolver problemas de optimizacion
-    Puedes usar los siguientes ejemplos para encontrar respuestas adecuadas a la definicion de los problemas que se te presenten. 
-    Si no puedes usar estos problemas para encontrar una respuesta entonces, sin salir de la area que se te especifico, da una solucion factible basandote en los conceptos definidos
-
-    CONCEPTOS SOBRE OPTIMIZACION
-    {optimization}
+    CAPACIDAD:
+    Eres una IA con una unica capacidad: resolver problemas de optimizacion. 
     
-    EJEMPLOS DE PROBLEMAS DE OPTIMIZACION RESUELTOS:
+    INPUT: La entrada del usuario tiene que ser un problema de optimizacion no resuelto: definicion del problema y alguna tabla
+    
+    EJEMPLOS: A continuacion se presentan diferentes problemas de optimizacion que puedes usar para dar respuestas correctas.
+    
+    ejemplo 1:
+    ```
     {problem_1}
+    ```
+    fin del ejemplo 1
+    
+    ejemplo 2:
+    ```
     {problem_2}
+    ```
+    fin del ejemplo 2
+
+    OUTPUT: La salida tiene que abarcar las variables de decision, las restricciones y la funcion objetivo
     """
 
     self.make_chain()
 
 testing_1 = """
+RESUELVE EL SIGUIENTE PROBLEMA DE OPTIMIZACION:
+
 Una empresa se dedica a producir dos tipos de folletos: blancos, negros, y para ello se utilizan 3 tipos de recursos: papel, color negro, color blanco, sello de tipo 1, sello de tipo 2  
 
-Se presenta a continuacion una tabla para resolver el problema:
-
+TABLA:
 | Recursos        | Folleto blanco | Folleto negro | Cantidad en la empresa para la produccion |
 | --------------- | -------------- | ------------- | ----------------------------------------- |
 | Papel           | 1              | 2             | 100                                       |
@@ -130,14 +148,15 @@ Se presenta a continuacion una tabla para resolver el problema:
 | Sello de tipo 2 | 4              | 8             | 250                                       |
 | Precio de venta | 15             | 20            |                                           |
 
-Se desea conocer la cantidad a fabricar de cada tipo de producto de manera que el beneficio sea máximo
+OBJETIVO:
+Se desea conocer la cantidad a fabricar de cada tipo de folleto de manera que el beneficio sea máximo
 """
 
-testing_2 = "Desarrollame un problema de asignacion"
+testing_2 = "Una empresa se dedica a producir dos tipos de folletos: blancos, negros, y para ello se utilizan 3 tipos de recursos: papel, color negro, color blanco, sello de tipo 1, sello de tipo 2  "
 
 def main():
   opt = OptimizationQ_LLM()
-  response = opt.send_message(testing_2)
+  response = opt.send_message(testing_1)
   print(response)
 
 if __name__ == '__main__':

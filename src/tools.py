@@ -37,7 +37,7 @@ def get_model() -> GoogleGenerativeAI:
 
   load_environment()
   model = GoogleGenerativeAI(
-    model='models/gemini-1.5-pro'
+    model='models/gemini-1.5-pro-latest'
   )
   return model
 
@@ -183,3 +183,4 @@ def prompt_template_parser_list_simility(word: str, k: int, model: GoogleGenerat
   })
   
   return result
+

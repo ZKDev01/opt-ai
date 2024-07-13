@@ -10,7 +10,7 @@ model = get_model()
 embedding = get_embedding()
 
 current = os.getcwd()
-doc_dir = '\\database\\docs-md'
+doc_dir = '\\database\\doc'
 faiss_dir = '\\database\\faiss'
 
 DATA_PATH = current + doc_dir
@@ -50,7 +50,7 @@ def load_contents(docs_dir: list[str]) -> list[str]:
 
   def load_content(doc_dir: str):
     content = ''
-    with open(doc_dir, 'r', encoding='utf-8') as file:
+    with open(doc_dir, 'r', encoding='ISO-8859-1') as file:
       content = file.read()
     return content  
   
@@ -116,10 +116,19 @@ class FAISS_VECTORSTORE():
         allow_dangerous_deserialization=True)
     else:
       chunks = create_chunks()
+      
+      """ 
+      ERROR POR LA CANTIDAD DE ELEMENTOS DE CHUNKS (debe ser por eso)
+      self.__vs = FAISS.from_documents(
+        documents=chunks,
+        embedding=embedding
+      )
+      """
+
       self.__vs = FAISS.from_documents(
         documents=chunks[0:100], 
         embedding=embedding)
-      
+
       i = 101
       while True:
         if i >= len(chunks):
@@ -171,5 +180,6 @@ def testing_load_and_query_something():
     print(item)
 
 if __name__ == "__main__":
-  FAISS_VECTORSTORE()
-  pass
+  testing_create_vectorstore()
+  testing_load_and_query_something()
+  

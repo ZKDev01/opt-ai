@@ -93,8 +93,16 @@ def create_chunks() -> List[Document]:
   docs_content = load_contents(docs_dir)
   chunks: List[Document] = []
   for doc_content in docs_content:
+    
+    document = Document(page_content=doc_content)
+    chunks.append(document)
+    
+    """ 
+    # CHUNK THE DOCUMENTS
     for item in chunkenizer(doc_content):
       chunks.append(item)
+    """
+    
   return chunks
 
 class FAISS_VECTORSTORE():

@@ -4,60 +4,62 @@ from langchain.chains.llm import LLMChain
 from langchain.chains.sequential import SequentialChain
 from langchain.prompts import PromptTemplate
 
-NUMBERS_OF_SOLUTIONS = 10
 model = get_model()
 
 template_base = """
 Tengo un problema de optimizacion que necesito resolver.
 
-PROBLEMA: {input}
+PROBLEMA: {INPUT}
 
 Provee {NUMBERS_OF_SOLUTIONS} soluciones distintas que sean capaces de resolver el problema en cuestion. 
 
-El problema que se presenta anteriormente es un tipo de problema de: {problem_type}
+El problema que se presenta anteriormente es un tipo de problema de: {TYPE}
 
 A continuacion se mostrara una forma de resolver un problema, parecido al de la entrada 
 
 {EXAMPLES}
-
 """
 
 template_evaluate = """ 
 Por cada solucion propuesta, evalua su potencial. 
 
 Considerando:
-- Pros 
-- Contras
-- Initial effort required
-- Implementacion 
-- Difficulty
-- Potential callenges
-- Expected outcomes
+- Ventajas del modelo propuesto 
+- Desventajas del modelo propuesto
+- Esfuerzo inicial requerido 
+- Implementacion
+- Dificultad 
+- Desafios potenciales para ser un modelo valido
+- Resultados esperados: si son validos para acertar el modelo
 
 Asigna una probabilidad de exito 
 
 {PROPOSED_SOLUTION}
 """
 
-template_final = """
-For each solution, elaborate on the thought process by generating potential scenarios, outlining strategies for implementation, 
-identifying necesary partnership or resources, and proposing solutions to potential obstacles.
-Additionally, consider any unexpected outcomes and outline contingency plans for their managment
+template_thought = """
+Por cada solucion, profundice el proceso de pensamiento generando escenarios potenciales, 
+esbozando estrategias para la implementacion, identificando las asociaciones o recursos 
+necesarios y proponiendo soluciones a posibles obstaculos. Ademas, considere cualquier 
+resultado inesperado 
+
 {solns}
 """
 
-template_result = """
-Rank the solutions based on evaluations and scenarios, assigning a probability of sucess in percentage for each.
-Provide justification and final thought for each ranking.
-Each ranking should be broken down into 4 points, Probability of sucess, justification, modes of failure and final thoughts. 
-Rank according to the highest probability of sucess
+template_final = """
+Clasifique las soluciones basandose en evaluaciones y escenarios, asignando una probabilidad 
+de exito en procentaje para cada una. Proporcione justificacion y pensamientos finales para 
+cada clasificacion. Cada clasificacion debe desglosarse en 4 puntos: 
+- Probabilidad de exito 
+- Justificacion
+- Modos de fallo 
+- Pensamientos finales
+
+Clasifique segun la mayor probabilidad de exito
 {proc_output}
 """
 
-def make_chain(
-    template: str, 
-    input_variables: list[str], 
-    output_key: str ) -> LLMChain:
+def make_chain(template: str, input_variables: list[str], output_key: str ) -> LLMChain:
   
   chain = LLMChain(
     llm=model,
@@ -73,37 +75,41 @@ def make_chain(
 def make_tot() -> SequentialChain:
   chain_1 = make_chain(
     template=template_base,
-    input_variables=[],
-    output_key=[]
+    input_variables=['INPUT','NUMBERS_OF_SOLUTIONS','TYPE','EXAMPLES'],
+    output_key=['PROPOSED_SOLUTION']
   )
   chain_2 = make_chain(
     template=template_base,
-    input_variables=[],
-    output_key=[]
+    input_variables=['PROPOSED_SOLUTION'],
+    output_key=['SOLUTIONS']
   )
   chain_3 = make_chain(
     template=template_base,
-    input_variables=[],
-    output_key=[]
+    input_variables=['SOLUTIONS'],
+    output_key=['PROCESSED_SOLUTIONS']
   )
   chain_4 = make_chain(
     template=template_base,
-    input_variables=[],
-    output_key=[]
+    input_variables=['PROCESSED_SOLUTIONS'],
+    output_key=['RESULTS']
   ) 
 
   chain = SequentialChain(
     chains=[ chain_1,chain_2,chain_3,chain_4 ],
-    input_variables=[],
-    output_variables=['result']
+    input_variables=['INPUT','NUMBERS_OF_SOLUTIONS','TYPE','EXAMPLES'],
+    output_variables=['RESULTS']
   )
 
-  return
+  return chain
 
-def get_answer_from_tot() -> str:
+def get_answer_from_tot(req: dict[str, str]) -> str:
   chain = make_tot()
-  answer = chain( {
-    '': [],
-  } )
-  return answer['result']
 
+  answer = chain( {
+    'INPUT': req['INPUT'],
+    'NUMBERS_OF_SOLUTIONS': req['NUMBERS_OF_SOLUTIONS'],
+    'TYPE': req['TYPE'],
+    'EXAMPLES': req['EXAMPLES'] 
+  } )
+
+  return answer['RESULTS']

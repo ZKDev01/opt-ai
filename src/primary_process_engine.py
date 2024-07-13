@@ -1,3 +1,5 @@
+from tot_opt import get_answer_from_tot 
+
 
 
 def selector_system (input: str) -> str:

@@ -23,5 +23,9 @@ min Z = sum_{e=1}^E sum_{j in J_e} C_j * x_j + sum_{i=1}^I ( u_i * (d_i^-) - o_i
 """
 
 
-if __name__ == '__main__':
+def main() -> None:
   print(general_answer)
+
+if __name__ == '__main__':
+  main()
+

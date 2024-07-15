@@ -36,10 +36,7 @@ OUTPUT:
   USED DOCUMENTS: 
 """
 
-capacidades = """
-un problema de optimizacion (OUTPUT: OPT)
-una pregunta que puede ser respondida usando la tecnica de Generacion mejorada de informacion (OUTPUT: RAG)      
-"""
+
 
 def selector_system (llm_historial: BaseHistory, query: str, kvalues_for_rag: int = 5, numbers_througth: int = 5) -> str:
   model = get_model()
@@ -60,8 +57,7 @@ def selector_system (llm_historial: BaseHistory, query: str, kvalues_for_rag: in
   chain = prompt | model
 
   answer = chain.invoke( { 
-    'query': query,
-    'capacidades': capacidades  
+    'query': query  
   } )
 
   return answer

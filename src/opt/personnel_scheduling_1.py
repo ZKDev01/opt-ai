@@ -35,4 +35,10 @@ general_answer = """
 min W = x_1 + x_2 + x_3 + ... + x_J 
 """
 
+def main() -> None:
+  print(general_problem)
+  print(general_answer)
+
+if __name__ == '__main__':
+  main()
 

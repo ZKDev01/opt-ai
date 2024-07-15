@@ -4,7 +4,7 @@ from langchain.chains.llm import LLMChain
 from langchain.chains.sequential import SequentialChain
 from langchain.prompts import PromptTemplate
 
-model = get_model()
+
 
 template_base = """
 Tengo un problema de optimizacion que necesito resolver.
@@ -19,6 +19,8 @@ A continuacion se mostrara una forma de resolver un problema, parecido al de la 
 
 {EXAMPLES}
 """
+
+
 
 template_evaluate = """ 
 Por cada solucion propuesta, evalua su potencial. 
@@ -37,6 +39,8 @@ Asigna una probabilidad de exito
 {PROPOSED_SOLUTION}
 """
 
+
+
 template_thought = """
 Por cada solucion, profundice el proceso de pensamiento generando escenarios potenciales, 
 esbozando estrategias para la implementacion, identificando las asociaciones o recursos 
@@ -45,6 +49,8 @@ resultado inesperado
 
 {solns}
 """
+
+
 
 template_final = """
 Clasifique las soluciones basandose en evaluaciones y escenarios, asignando una probabilidad 
@@ -59,8 +65,10 @@ Clasifique segun la mayor probabilidad de exito
 {proc_output}
 """
 
+
+
 def make_chain(template: str, input_variables: list[str], output_key: str ) -> LLMChain:
-  
+  model = get_model()
   chain = LLMChain(
     llm=model,
     prompt=PromptTemplate(
@@ -71,6 +79,8 @@ def make_chain(template: str, input_variables: list[str], output_key: str ) -> L
   )
   
   return chain
+
+
 
 def make_tot() -> SequentialChain:
   chain_1 = make_chain(
@@ -102,6 +112,8 @@ def make_tot() -> SequentialChain:
 
   return chain
 
+
+
 def get_answer_from_tot(req: dict[str, str]) -> str:
   chain = make_tot()
 
@@ -113,3 +125,5 @@ def get_answer_from_tot(req: dict[str, str]) -> str:
   } )
 
   return answer['RESULTS']
+
+

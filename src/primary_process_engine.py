@@ -38,68 +38,21 @@ OUTPUT:
 
 
 
-def selector_system (llm_historial: BaseHistory, query: str, kvalues_for_rag: int = 5, numbers_througth: int = 5) -> str:
-  model = get_model()
-  prompt = ChatPromptTemplate.from_messages([
-    ('human', """
-      Puedes identificar que tipo de prompt elegir en consecuencia del input del usuario:
+def input_to_apply_rag (input: str, kvalues: int = 5):
+  pass
 
-      INPUT: {query}
+def input_like_mixing_problem (input: str) -> str:
+  pass
 
-      Puedes determinar si el input es:
-        OPT -> problema de optimizacion
-        RAG -> pregunta que debe ser respondida usando la tecnica de Generacion Mejorada de Informacion 
-    
-      OUTPUT
-      """ )
-    ])
+def input_like_personnel_scheduling_1 (input: str) -> str:
+  pass
 
-  chain = prompt | model
+def input_like_personnel_scheduling_2 (input: str) -> str:
+  pass
 
-  answer = chain.invoke( { 
-    'query': query  
-  } )
-
-  return answer
-
-
-def selector_with_llm ():
+def input_like_resource_allocation (input: str) -> str:
   pass
 
 
-def selector_optimization_problem (input: str) -> list[str]:
-  prompt = f"""
-  Eres un asistente capaz de seleccionar, dado un problema de optimizacion,
-  otro problema que pueda ser capaz de parecerse. 
-
-  -----------------------------------------------------
-
-  Problemas con su descripcion:
-  
-  ASIGNACION DE RECURSOS:  
-    NOMBRE:         asignacion de recursos
-    DESCRIPCION:    [DESCRIPCION]
-  
-  CAMINANTE: 
-    NOMBRE:         caminante
-    DESCRIPCION:    [DESCRIPCION]
-    
-  PERSONAL SCHEDULING: 
-    NOMBRE:         problema del caminante
-    DESCRIPCION:    [DESCRIPCION] 
-  
-  -----------------------------------------------------
-  
-  Posibles output: 
-    PROBLEM TYPE:   NOMBRE de algun tipo de problema presentado anteriormente
-    DESCRIPTION:    DESCRIPCION del problema 
-    INPUT:          Entrada que se analizo / Problema original 
-  
-  -----------------------------------------------------
-  
-  INPUT: {input}  
-  """
-
-  pass
 
 

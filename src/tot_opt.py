@@ -1,4 +1,4 @@
-from tools import get_model
+from src.tools import get_model
 
 from langchain.chains.llm import LLMChain
 from langchain.chains.sequential import SequentialChain

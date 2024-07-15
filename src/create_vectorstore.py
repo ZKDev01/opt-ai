@@ -1,5 +1,5 @@
 from typing import List
-from tools import get_model, get_embedding
+from src.tools import get_model, get_embedding
 import os
 
 from langchain_text_splitters import RecursiveCharacterTextSplitter

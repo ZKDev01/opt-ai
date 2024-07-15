@@ -1,11 +1,14 @@
-from testing_code.llm import LLM_main
+# from testing_code.llm import LLM_main
+
+# TODO: pendiente conectar todas las cosas 
 
 from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, ContextTypes, filters
 
 class DEPLOY_BOT():
   def __init__(self) -> None:
-    assistant = LLM_main(k=3)
+    # assistant = LLM_main(k=3)
+    pass
 
   async def start(update: Update, context: ContextTypes):
     await update.message.reply_text("Hola, soy un asistente personal")

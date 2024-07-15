@@ -7,6 +7,8 @@ from langchain_core.output_parsers import StrOutputParser, CommaSeparatedListOut
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.pydantic_v1 import BaseModel, Field
 
+
+
 def load_environment():
   """
   Carga las variables de entorno necesarias para el funcionamiento del programa
@@ -19,6 +21,8 @@ def load_environment():
 
   dotenv.load_dotenv()
   os.environ.setdefault('google_api_key', os.getenv('google_api_key'))
+
+
 
 def get_model() -> GoogleGenerativeAI:
   """
@@ -37,9 +41,12 @@ def get_model() -> GoogleGenerativeAI:
 
   load_environment()
   model = GoogleGenerativeAI(
-    model='models/gemini-1.5-pro-latest'
+    model='models/gemini-1.5-pro-latest',
+    temperature=0.5
   )
   return model
+
+
 
 def get_embedding() -> GoogleGenerativeAIEmbeddings:
   """
@@ -56,6 +63,8 @@ def get_embedding() -> GoogleGenerativeAIEmbeddings:
     model='models/embedding-001'
   )
   return embedding 
+
+
 
 def prompt_template_QA(question: str, k: int, model: GoogleGenerativeAI) -> str:
   """
@@ -104,6 +113,8 @@ def prompt_template_QA(question: str, k: int, model: GoogleGenerativeAI) -> str:
     })
   return result
 
+
+
 def prompt_template_json_example_person(message: str, model: GoogleGenerativeAI) -> str:
   """
   Construye y ejecuta un prompt basado en un mensaje dado, utilizando un formato especifico para extraer informacion relevante.
@@ -136,6 +147,8 @@ def prompt_template_json_example_person(message: str, model: GoogleGenerativeAI)
   })
   return result
 
+
+
 def prompt_template_parser_string(question: str, model: GoogleGenerativeAI) -> str:
   """
   Responde una pregunta especifica utilizando un modelo de LLM. 
@@ -157,6 +170,8 @@ def prompt_template_parser_string(question: str, model: GoogleGenerativeAI) -> s
   result = chain.invoke({"question": question})
   
   return result
+
+
 
 def prompt_template_parser_list_simility(word: str, k: int, model: GoogleGenerativeAI) -> str:
   """
@@ -183,4 +198,5 @@ def prompt_template_parser_list_simility(word: str, k: int, model: GoogleGenerat
   })
   
   return result
+
 

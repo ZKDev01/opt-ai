@@ -5,8 +5,12 @@ from langchain_google_genai import GoogleGenerativeAI, GoogleGenerativeAIEmbeddi
 from langchain_core.messages import HumanMessage, AIMessage
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 
+
+
 class BaseHistory():
   
+
+
   def __init__(self) -> None:
     self.model: GoogleGenerativeAI = get_model()
     self.embedding: GoogleGenerativeAIEmbeddings = get_embedding()
@@ -17,6 +21,8 @@ class BaseHistory():
     """
     self.vectorstore = FAISS_VECTORSTORE(load=True)  
 
+
+
   def make_chain(self) -> None:
     self.prompt = ChatPromptTemplate.from_messages([
       ('system', f'{self.prompt}'),
@@ -25,8 +31,12 @@ class BaseHistory():
     ])
     self.chain = self.prompt | self.model
 
+
+
   def clean_history(self) -> None:
     self.chat: list = []
+
+
 
   def send_processed_query(self, query: str) -> str:
     response = self.chain.invoke({'input':query, 'chat':self.chat})
@@ -34,13 +44,5 @@ class BaseHistory():
     self.chat.append( AIMessage(content=response) )
 
     return response
-
-
-def main():
-  pass
-
-if __name__ == '__main__':
-  main()
-
 
 

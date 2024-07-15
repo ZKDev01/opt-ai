@@ -18,6 +18,8 @@ FAISS_PATH = current + faiss_dir
 
 dir = os.listdir(DATA_PATH)
 
+
+
 def search_docs() -> list[str]:
   """
   Busca todos los documentos disponibles en el directorio especificado y retorna sus rutas completas
@@ -32,6 +34,8 @@ def search_docs() -> list[str]:
   docs_dir = os.listdir(DATA_PATH)
   docs_dir = [DATA_PATH + '\\' + item for item in docs_dir]
   return docs_dir
+
+
 
 def load_contents(docs_dir: list[str]) -> list[str]:
   """
@@ -48,6 +52,8 @@ def load_contents(docs_dir: list[str]) -> list[str]:
       list[str]: Lista de cadenas donde cada elemento es el contenido leido de un documento correspondiente a las rutas proporcionadas
   """
 
+
+
   def load_content(doc_dir: str):
     content = ''
     with open(doc_dir, 'r', encoding='ISO-8859-1') as file:
@@ -56,6 +62,8 @@ def load_contents(docs_dir: list[str]) -> list[str]:
   
   docs_content = [load_content(doc_dir=doc_dir) for doc_dir in docs_dir]
   return docs_content 
+
+
 
 def chunkenizer(content: str) -> List[Document]:
   """
@@ -75,6 +83,8 @@ def chunkenizer(content: str) -> List[Document]:
   )
   chunks = text_splitter.create_documents([content])
   return chunks
+
+
 
 def create_chunks() -> List[Document]:
   """
@@ -105,7 +115,11 @@ def create_chunks() -> List[Document]:
     
   return chunks
 
+
+
 class FAISS_VECTORSTORE():
+
+
 
   def __init__(self, load: bool = False) -> None:
     """
@@ -155,6 +169,8 @@ class FAISS_VECTORSTORE():
         i=i+100
       self.__vs.save_local(FAISS_PATH)
 
+
+
   def similarity_search(self, query: str, k: int = 3) -> list[str]:
     """
     Realiza una busqueda de similaridad en la base de datos vectorial utilizando una consulta 
@@ -174,9 +190,13 @@ class FAISS_VECTORSTORE():
     results_content = [result.page_content for result in results]
     return results_content
 
+
+
 class MONGODB_VECTORSTORE():
   # TODO
   pass
+
+
 
 def testing_create_vectorstore():
   FAISS_VECTORSTORE()
@@ -186,6 +206,8 @@ def testing_load_and_query_something():
   result = vs.similarity_search(query='que es la apologetica', k=10)
   for item in result:
     print(item)
+
+
 
 if __name__ == "__main__":
   testing_create_vectorstore()

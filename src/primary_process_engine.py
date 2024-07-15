@@ -50,7 +50,8 @@ def selector_system (llm_historial: BaseHistory, query: str, kvalues_for_rag: in
       INPUT: {query}
 
       Puedes determinar si el input es:
-      {capacidades} 
+        OPT -> problema de optimizacion
+        RAG -> pregunta que debe ser respondida usando la tecnica de Generacion Mejorada de Informacion 
     
       OUTPUT
       """ )

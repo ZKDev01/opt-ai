@@ -1,8 +1,10 @@
 from langchain_core.prompts import ChatPromptTemplate
 
 from src.chat_history import BaseHistory
-from src.tot_opt import get_answer_from_tot
+from src.cot_opt import get_answer_from_cot
 from src.tools import get_model
+
+from src.opt.mixing_problem import mixing_general, mixing_examples
 
 
 rag_prompt = """
@@ -41,8 +43,19 @@ OUTPUT:
 def input_to_apply_rag (input: str, kvalues: int = 5):
   pass
 
-def input_like_mixing_problem (input: str) -> str:
-  pass
+def input_like_mixing_problem (input: str, ksolutions: int = 5) -> str:
+  
+  req = {
+    'INPUT' : input,
+    'NUMBERS_OF_SOLUTIONS' : ksolutions,
+    'TYPE' : 'problema de la mezcla o mixing problem',
+    'GENERAL' : mixing_general,
+    'EXAMPLES' : mixing_examples
+  }
+
+  answer = get_answer_from_cot(req=req)
+
+  return answer
 
 def input_like_personnel_scheduling_1 (input: str) -> str:
   pass

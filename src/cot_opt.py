@@ -15,9 +15,14 @@ Provee {NUMBERS_OF_SOLUTIONS} soluciones distintas que sean capaces de resolver 
 
 El problema que se presenta anteriormente es un tipo de problema de: {TYPE}
 
-A continuacion se mostrara una forma de resolver un problema, parecido al de la entrada 
+A continuacion se mostrara la forma generalizada de resolver el problema, parecido al de la entrada 
+
+{GENERAL}
+
+Estos serian los ejemplos para que tengas en cuenta a la hora de devolver las soluciones
 
 {EXAMPLES}
+
 """
 
 
@@ -47,7 +52,7 @@ esbozando estrategias para la implementacion, identificando las asociaciones o r
 necesarios y proponiendo soluciones a posibles obstaculos. Ademas, considere cualquier 
 resultado inesperado 
 
-{solns}
+{SOLUTIONS}
 """
 
 
@@ -62,19 +67,22 @@ cada clasificacion. Cada clasificacion debe desglosarse en 4 puntos:
 - Pensamientos finales
 
 Clasifique segun la mayor probabilidad de exito
-{proc_output}
+{PROCESSED_SOLUTIONS}
 """
 
 
 
 def make_chain(template: str, input_variables: list[str], output_key: str ) -> LLMChain:
   model = get_model()
+
+  prompt = PromptTemplate(
+    input_variables=input_variables,
+    template=template
+  )
+
   chain = LLMChain(
     llm=model,
-    prompt=PromptTemplate(
-      input_variables=input_variables,
-      template=template
-    ),
+    prompt=prompt,
     output_key=output_key
   )
   
@@ -85,28 +93,28 @@ def make_chain(template: str, input_variables: list[str], output_key: str ) -> L
 def make_tot() -> SequentialChain:
   chain_1 = make_chain(
     template=template_base,
-    input_variables=['INPUT','NUMBERS_OF_SOLUTIONS','TYPE','EXAMPLES'],
-    output_key=['PROPOSED_SOLUTION']
+    input_variables=['INPUT','NUMBERS_OF_SOLUTIONS','TYPE','GENERAL','EXAMPLES'],
+    output_key='PROPOSED_SOLUTION'
   )
   chain_2 = make_chain(
     template=template_base,
     input_variables=['PROPOSED_SOLUTION'],
-    output_key=['SOLUTIONS']
+    output_key='SOLUTIONS'
   )
   chain_3 = make_chain(
     template=template_base,
     input_variables=['SOLUTIONS'],
-    output_key=['PROCESSED_SOLUTIONS']
+    output_key='PROCESSED_SOLUTIONS'
   )
   chain_4 = make_chain(
     template=template_base,
     input_variables=['PROCESSED_SOLUTIONS'],
-    output_key=['RESULTS']
+    output_key='RESULTS'
   ) 
 
   chain = SequentialChain(
     chains=[ chain_1,chain_2,chain_3,chain_4 ],
-    input_variables=['INPUT','NUMBERS_OF_SOLUTIONS','TYPE','EXAMPLES'],
+    input_variables=['INPUT','NUMBERS_OF_SOLUTIONS','TYPE','GENERAL','EXAMPLES'],
     output_variables=['RESULTS']
   )
 
@@ -114,14 +122,15 @@ def make_tot() -> SequentialChain:
 
 
 
-def get_answer_from_tot(req: dict[str, str]) -> str:
+def get_answer_from_cot(req: dict[str, str]) -> str:
   chain = make_tot()
 
   answer = chain( {
     'INPUT': req['INPUT'],
     'NUMBERS_OF_SOLUTIONS': req['NUMBERS_OF_SOLUTIONS'],
     'TYPE': req['TYPE'],
-    'EXAMPLES': req['EXAMPLES'] 
+    'GENERAL': req['GENERAL'],
+    'EXAMPLES': req['EXAMPLES']
   } )
 
   return answer['RESULTS']

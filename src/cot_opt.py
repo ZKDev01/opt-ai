@@ -11,9 +11,9 @@ from src.chat_history import BaseHistory
 class COT_history:
   def __init__(self, general: str, examples: str) -> None:
     self.examples = examples
-    self.historial = BaseHistory ()
+    self.historial = BaseHistory (with_vectorstore=False)
     self.historial.prompt = f"""
-    Eres capaz de resolver problemas de optimizacion especificos
+    Eres capaz de resolver problemas de optimizacion especificos y utilizar la conversacion que tengas con el usuario para aprender 
 
     Tienes la capacidad de responder los problemas con una estructura de 
     - Variables de decision: variables que permiten identificar el modelo propuesto 
@@ -35,7 +35,8 @@ class COT_history:
     response = self.historial.chain.invoke( { 'input': input, 'chat': self.chat } )
     return response
 
-  def cot_processed_problem (self, problem: str, kvalues: int = 3) -> str:
+
+  def cot_processed_problem (self, problem: str, kvalues: int = 3) -> list[str]:
     proposed_result = []
     
     for _ in range(1,kvalues+1):
@@ -47,9 +48,45 @@ class COT_history:
       """ )
       proposed_result.append(tmp)
 
-    
+    print("proposed_result finish")
 
-    pass
+    evaluate_result = []
+
+    for proposed in proposed_result:
+      tmp_evaluate = self.send_processed_input( input=f"""
+      Analiza el siguiente problema de optimizacion: {problem}
+
+      Analiza ahora la siguiente propuesta: {proposed}
+
+      Determina de la propuesta anterior: 
+      - Ventajas del modelo propuesta como solucion del problema de optimizacion
+      - Desventajas que puede tener el modelo
+      - Fallos que puede presentar 
+      - Asigna una probabilidad de exito ante el problema
+      """ )
+
+      print("evaluate proposed finish")
+
+      tmp_final = self.send_processed_input ( input=f"""
+      SOLUCION: {proposed}
+
+      EVALUACION DE LA SOLUCION: {tmp_evaluate}
+
+      Clasifique la solucion basandose en la evaluacion siguiente y asigna una posibilidad de exito 
+      Proporcione una justificacion y pensamientos finales para la clasificacion. 
+      
+      Esta clasificacion debe desglosarse en 4 puntos:
+      - Probabilidad de exito
+      - Justificacion
+      - Modos de fallo
+      - Pensamientos finales
+      """ )
+
+      evaluate_result.append(tmp_final)
+
+      print("probabilidad de exito finish")
+
+    return evaluate_result
 
   def cot_processed_problem_aux (self, problem: str, proposed_result: list[str]) -> str:
     

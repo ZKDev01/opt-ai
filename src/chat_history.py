@@ -11,7 +11,7 @@ class BaseHistory():
   
 
 
-  def __init__(self) -> None:
+  def __init__(self, with_vectorstore: bool = True) -> None:
     self.model: GoogleGenerativeAI = get_model()
     self.embedding: GoogleGenerativeAIEmbeddings = get_embedding()
     self.chat: list = []
@@ -19,7 +19,7 @@ class BaseHistory():
     Eres un asistente, capaz de responder detalladamente las respuestas que se te hagan
     Tambien debes tener conocimiento sobre la conversacion que tengas con el usuario
     """
-    self.vectorstore = FAISS_VECTORSTORE(load=True)  
+    if with_vectorstore: self.vectorstore = FAISS_VECTORSTORE(load=True)  
 
 
 

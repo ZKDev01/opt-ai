@@ -64,11 +64,11 @@ mixing_general = """
   PROBLEMA
 una fabrica produce un producto X mezclando N materiales: m_1, m_2, m_3, ..., m_N, donde se cumple que estos pueden agruparse en diferentes categorias o tipos:
 
-  x_1 materiales de tipo 1 formados por el conjunto C_1 in { m_1, m_2, m_3, ..., m_N }
-  x_2 materiales de tipo 2 formados por el conjunto C_2 in { m_1, m_2, m_3, ..., m_N }
-  x_3 materiales de tipo 3 formados por el conjunto C_3 in { m_1, m_2, m_3, ..., m_N }
+  x_1 materiales de tipo 1 formados por el conjunto C_1 in set (  m_1, m_2, m_3, ..., m_N  )
+  x_2 materiales de tipo 2 formados por el conjunto C_2 in set (  m_1, m_2, m_3, ..., m_N  )
+  x_3 materiales de tipo 3 formados por el conjunto C_3 in set (  m_1, m_2, m_3, ..., m_N  )
   ...
-  x_T materiales de tipo T formados por el conjunto C_T in { m_1, m_2, m_3, ..., m_N }
+  x_T materiales de tipo T formados por el conjunto C_T in set (  m_1, m_2, m_3, ..., m_N  )
 
 Pueden ser o no disjuntos los conjuntos C_i
 
@@ -99,11 +99,11 @@ se trata de maximizar el beneficio de la produccion final conociendo que el prod
   ... 
   m_N: cantidad del material N
   
-  x_1: materiales de tipo 1 formados por el conjunto C_1 in { m_1, m_2, m_3, ..., m_N }
-  x_2: materiales de tipo 2 formados por el conjunto C_2 in { m_1, m_2, m_3, ..., m_N }
-  x_3: materiales de tipo 3 formados por el conjunto C_3 in { m_1, m_2, m_3, ..., m_N }
+  x_1: materiales de tipo 1 formados por el conjunto C_1 in set (  m_1, m_2, m_3, ..., m_N  )
+  x_2: materiales de tipo 2 formados por el conjunto C_2 in set (  m_1, m_2, m_3, ..., m_N  )
+  x_3: materiales de tipo 3 formados por el conjunto C_3 in set (  m_1, m_2, m_3, ..., m_N  )
   ...
-  x_T: materiales de tipo T formados por el conjunto C_T in { m_1, m_2, m_3, ..., m_N }
+  x_T: materiales de tipo T formados por el conjunto C_T in set (  m_1, m_2, m_3, ..., m_N  )
 
   t_1: cantidades que entran a la fabrica de los materiales de tipo 1
   t_2: cantidades que entran a la fabrica de los materiales de tipo 2

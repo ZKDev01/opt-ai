@@ -1,12 +1,13 @@
 from langchain_core.prompts import ChatPromptTemplate
 
 from src.chat_history import BaseHistory
-from src.cot_opt import get_answer_from_cot
+from src.cot_opt import COT_history
 from src.tools import get_model
 
 from src.opt.mixing_problem import mixing_general, mixing_examples
 
 
+# MEJORAR EL PROMPT CON INPUT TEMPLATE Y OUTPUT TEMPLATE o PARSER de LANGCHAIN
 rag_prompt = """
 PREPARATION: 
 - Debes ser capaz de responder a la respuesta segun el contenido de DOCUMENTS que se te presenten de la mejor forma posible
@@ -43,8 +44,13 @@ OUTPUT:
 def input_to_apply_rag (input: str, kvalues: int = 5):
   pass
 
-def input_like_mixing_problem (input: str, ksolutions: int = 5) -> str:
-  pass
+def input_like_mixing_problem (input: str, ksolutions: int = 5) -> list[str]:
+  historial = COT_history(general=mixing_general, examples=mixing_examples)
+  
+  output = historial.cot_processed_problem(problem=input, kvalues=ksolutions)
+  # output = historial.send_processed_input(input=input)
+
+  return output
 
 def input_like_personnel_scheduling_1 (input: str) -> str:
   pass

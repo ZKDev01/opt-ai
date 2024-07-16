@@ -5,7 +5,6 @@ from src.chat_history import BaseHistory
 from src.tools import get_model
 from src.primary_process_engine import input_to_apply_rag, input_like_mixing_problem
 
-from src.cot_opt_test import ok
 from src.opt.mixing_problem import mixing_general, mixing_examples
 
 def testing_rag() -> str:
@@ -30,6 +29,7 @@ def testing_mixing_problem() -> str:
   """
 
   answer = input_like_mixing_problem(input=input, ksolutions=3)
+  
   return  answer
 
 

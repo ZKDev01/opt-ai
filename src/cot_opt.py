@@ -13,8 +13,6 @@ PROBLEMA: {INPUT}
 
 Provee {NUMBERS_OF_SOLUTIONS} soluciones distintas que sean capaces de resolver el problema en cuestion. 
 
-El problema que se presenta anteriormente es un tipo de problema de: {TYPE}
-
 A continuacion se mostrara la forma generalizada de resolver el problema, parecido al de la entrada 
 
 {GENERAL}
@@ -67,6 +65,7 @@ cada clasificacion. Cada clasificacion debe desglosarse en 4 puntos:
 - Pensamientos finales
 
 Clasifique segun la mayor probabilidad de exito
+
 {PROCESSED_SOLUTIONS}
 """
 
@@ -93,7 +92,7 @@ def make_chain(template: str, input_variables: list[str], output_key: str ) -> L
 def make_tot() -> SequentialChain:
   chain_1 = make_chain(
     template=template_base,
-    input_variables=['INPUT','NUMBERS_OF_SOLUTIONS','TYPE','GENERAL','EXAMPLES'],
+    input_variables=['INPUT','NUMBERS_OF_SOLUTIONS','GENERAL','EXAMPLES'],
     output_key='PROPOSED_SOLUTION'
   )
   chain_2 = make_chain(
@@ -114,7 +113,7 @@ def make_tot() -> SequentialChain:
 
   chain = SequentialChain(
     chains=[ chain_1,chain_2,chain_3,chain_4 ],
-    input_variables=['INPUT','NUMBERS_OF_SOLUTIONS','TYPE','GENERAL','EXAMPLES'],
+    input_variables=['INPUT','NUMBERS_OF_SOLUTIONS','GENERAL','EXAMPLES'],
     output_variables=['RESULTS']
   )
 
@@ -128,7 +127,6 @@ def get_answer_from_cot(req: dict[str, str]) -> str:
   answer = chain( {
     'INPUT': req['INPUT'],
     'NUMBERS_OF_SOLUTIONS': req['NUMBERS_OF_SOLUTIONS'],
-    'TYPE': req['TYPE'],
     'GENERAL': req['GENERAL'],
     'EXAMPLES': req['EXAMPLES']
   } )

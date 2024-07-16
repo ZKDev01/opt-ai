@@ -48,7 +48,6 @@ def input_like_mixing_problem (input: str, ksolutions: int = 5) -> str:
   req = {
     'INPUT' : input,
     'NUMBERS_OF_SOLUTIONS' : ksolutions,
-    'TYPE' : 'problema de la mezcla o mixing problem',
     'GENERAL' : mixing_general,
     'EXAMPLES' : mixing_examples
   }

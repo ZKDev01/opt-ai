@@ -1,9 +1,18 @@
 # Formulacion clasica o por cobertura de conjuntos
 
 general_problem = """
+Una organizacion necesita garantizar que sus operaciones diarias esten adecuadamente cubiertas por personal suficiente,
+pero tambien 
 
+Se tiene una organizacion, escuela o empresa, y esta necesita garantizar que los empleados esten presentes en turnos definidos. 
+Se tienen J turnos y para cada turno se necesitan r_i personas minimas para cubrirlo
+  r_1: numero de personas que como minimo se necesitan para cubrir el turno 1
+  r_2: numero de personas que como minimo se necesitan para cubrir el turno 2
+  r_3: numero de personas que como minimo se necesitan para cubrir el turno 3 
+  ... 
+  r_J: numero de personas que como minimo se necesitan para cubrir el turno J
 
-
+Cada turno puede tener diferentes periodo de trabajos. Se tienen un total de I periodos para cada turno
 """
 
 general_answer = """
@@ -34,6 +43,8 @@ general_answer = """
 **funcion objetivo:**
 min W = x_1 + x_2 + x_3 + ... + x_J 
 """
+
+
 
 def main() -> None:
   print(general_problem)

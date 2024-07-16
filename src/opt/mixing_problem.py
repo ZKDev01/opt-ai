@@ -61,6 +61,79 @@ max z = 150 * y - 110 * x_1 - 120 * x_2 - 130 * x_3 - 110 * x_4 - 115 * x_5
 
 
 mixing_general = """
+  PROBLEMA
+una fabrica produce un producto X mezclando N materiales: m_1, m_2, m_3, ..., m_N, donde se cumple que estos pueden agruparse en diferentes categorias o tipos:
+
+  x_1 materiales de tipo 1 formados por el conjunto C_1 in { m_1, m_2, m_3, ..., m_N }
+  x_2 materiales de tipo 2 formados por el conjunto C_2 in { m_1, m_2, m_3, ..., m_N }
+  x_3 materiales de tipo 3 formados por el conjunto C_3 in { m_1, m_2, m_3, ..., m_N }
+  ...
+  x_T materiales de tipo T formados por el conjunto C_T in { m_1, m_2, m_3, ..., m_N }
+
+Pueden ser o no disjuntos los conjuntos C_i
+
+en un periodo de tiempo determinado es posible un maximo de materiales de tipo i, se puede expresar de la siguiente forma:
+  t_1 cantidades que entran a la fabrica de los materiales de tipo 1
+  t_2 cantidades que entran a la fabrica de los materiales de tipo 2
+  t_3 cantidades que entran a la fabrica de los materiales de tipo 3
+  ...
+  t_T cantidades que entran a la fabrica de los materiales de tipo T
+
+El producto X tiene que cumplir con un valor f, que viene proporcionado de la mezcla de los materiales
+
+TABLA: Costo de los tipo de materiales y lo que aportan al producto X para el valor f
+
+|          | material 1  | material 2  | material 3  | ... | material N  | 
+| -------- | ----------- | ----------- | ----------- | --- | ----------- | 
+| costo    | c_1         | c_2         | c_3         | ... | c_N         |
+| valor f  | v_1         | v_2         | v_3         | ... | v_N         |
+
+se trata de maximizar el beneficio de la produccion final conociendo que el producto se vende a un precio P
+
+  RESPUESTA
+
+**variables de decision**
+  m_1: cantidad del material 1 
+  m_2: cantidad del material 2
+  m_3: cantidad del material 3
+  ... 
+  m_N: cantidad del material N
+  
+  x_1: materiales de tipo 1 formados por el conjunto C_1 in { m_1, m_2, m_3, ..., m_N }
+  x_2: materiales de tipo 2 formados por el conjunto C_2 in { m_1, m_2, m_3, ..., m_N }
+  x_3: materiales de tipo 3 formados por el conjunto C_3 in { m_1, m_2, m_3, ..., m_N }
+  ...
+  x_T: materiales de tipo T formados por el conjunto C_T in { m_1, m_2, m_3, ..., m_N }
+
+  t_1: cantidades que entran a la fabrica de los materiales de tipo 1
+  t_2: cantidades que entran a la fabrica de los materiales de tipo 2
+  t_3: cantidades que entran a la fabrica de los materiales de tipo 3
+  ...
+  t_T: cantidades que entran a la fabrica de los materiales de tipo T
+
+  c_1: costo del material 1
+  c_2: costo del material 2
+  c_3: costo del material 3
+  ...
+  c_N: costo del material N 
+
+  v_1: valor f que proporciona el material 1 al producto final
+  v_2: valor f que proporciona el material 2 al producto final
+  v_3: valor f que proporciona el material 3 al producto final
+  ...
+  v_N: valor f que proporciona el material N al producto final
+
+  N: cantidad de materiales de la fabrica
+  T: cantidad de tipos de materiales de la fabrica 
+  P: precio del producto final
+
+  f: funcion que tiene que cumplirse que esta regido por los valores v_i 
+
+  X: cantidad del producto que se tiene que producir  
+
+**restricciones**
+
+**funcion objetivo**
 
 """
 

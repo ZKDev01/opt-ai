@@ -44,17 +44,7 @@ def input_to_apply_rag (input: str, kvalues: int = 5):
   pass
 
 def input_like_mixing_problem (input: str, ksolutions: int = 5) -> str:
-  
-  req = {
-    'INPUT' : input,
-    'NUMBERS_OF_SOLUTIONS' : ksolutions,
-    'GENERAL' : mixing_general,
-    'EXAMPLES' : mixing_examples
-  }
-
-  answer = get_answer_from_cot(req=req)
-
-  return answer
+  pass
 
 def input_like_personnel_scheduling_1 (input: str) -> str:
   pass

@@ -6,6 +6,8 @@ from src.tools import get_model
 
 from src.opt.mixing_problem import mixing_general, mixing_examples
 from src.opt.resource_allocation import resource_allocation_general, resource_allocation_example
+from src.opt.personnel_scheduling_1 import personnel_scheduling_general
+
 
 
 # MEJORAR EL PROMPT CON INPUT TEMPLATE Y OUTPUT TEMPLATE o PARSER de LANGCHAIN
@@ -64,15 +66,14 @@ def input_like_resource_allocation (input: str, ksolutions: int = 5) -> str:
   output = historial.cot_processed_problem(problem=input, kvalues=ksolutions)
   return output
 
+def input_like_personnel_scheduling (input: str, ksolutions: int = 5) -> str:
+  historial = COT_history(
+    general = personnel_scheduling_general,
+    examples= ''
+  )
 
-
-
-
-def input_like_personnel_scheduling_1 (input: str) -> str:
-  pass
-
-def input_like_personnel_scheduling_2 (input: str) -> str:
-  pass
+  output = historial.cot_processed_problem(problem=input, kvalues=ksolutions)
+  return output
 
 
 

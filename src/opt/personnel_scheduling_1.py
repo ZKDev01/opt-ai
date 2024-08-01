@@ -1,6 +1,6 @@
 # Formulacion clasica o por cobertura de conjuntos
 
-general_problem = """
+personnel_scheduling_general = """
 Una organizacion necesita garantizar que sus operaciones diarias esten adecuadamente cubiertas por personal suficiente,
 pero tambien 
 
@@ -13,9 +13,7 @@ Se tienen J turnos y para cada turno se necesitan r_i personas minimas para cubr
   r_J: numero de personas que como minimo se necesitan para cubrir el turno J
 
 Cada turno puede tener diferentes periodo de trabajos. Se tienen un total de I periodos para cada turno
-"""
 
-general_answer = """
 **variables de decision:**
   W     : numero total de empleados asignados a todos los turnos J
   x_j   : numero de empleados asignados al turno j
@@ -42,13 +40,14 @@ general_answer = """
 
 **funcion objetivo:**
 min W = x_1 + x_2 + x_3 + ... + x_J 
+
 """
 
 
 
+
 def main() -> None:
-  print(general_problem)
-  print(general_answer)
+  print( personnel_scheduling_general )
 
 if __name__ == '__main__':
   main()

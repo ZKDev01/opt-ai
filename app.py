@@ -3,7 +3,7 @@ from langchain_core.prompts import ChatPromptTemplate
 
 from src.chat_history import BaseHistory
 from src.tools import get_model
-from src.primary_process_engine import input_to_apply_rag, input_like_mixing_problem
+from src.primary_process_engine import input_to_apply_rag, input_like_mixing_problem, input_like_resource_allocation
 
 from src.opt.mixing_problem import mixing_general, mixing_examples
 
@@ -12,7 +12,7 @@ def testing_rag() -> str:
 
 
 
-def testing_mixing_problem() -> str:
+def test_mixing_problem() -> str:
   input = """
   una fábrica produce combustible mezclando diferentes materiales: material A, material B, material C, material D, material E 
   en un mes sólo entra en la fabrica 100 toneladas de materiales A, B, C, D, mientras que del material E entran 150 toneladas 
@@ -33,6 +33,12 @@ def testing_mixing_problem() -> str:
   return  answer
 
 
+def test_resource_allocation_problem() -> str:
+  input = """
+  Defineme el problema de asignacion de recursos
+  """
+  answer = input_like_resource_allocation(input=input, ksolutions=3)
+  return answer
 
 
 
@@ -44,5 +50,5 @@ def main() -> None:
 
 
 if __name__ == '__main__':
-  print ( testing_mixing_problem() )
+  print ( test_resource_allocation_problem() )
 

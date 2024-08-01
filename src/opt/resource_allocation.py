@@ -1,8 +1,7 @@
-"""
 
-"""
+# problema de asignacion de recursos o resource allocation problem
 
-general_problem = """
+resource_allocation_general = """
 en una fábrica se producen n tipos distintos de productos, y para ello se utilizan m recursos. 
 en la siguiente tabla se especifican: 
 
@@ -17,9 +16,6 @@ tabla
 | m                                        | c_m1 | c_m2 | ... | c_mn | b_m                               |
 | contribucion a z por unidad de actividad | c_1  | c_2  | ... | c_n  |                                   |
 
-"""
-
-general_answer = """ 
 **variables de decision**
 
 z = valor del rendimiento
@@ -42,7 +38,9 @@ x_n >= 0
 **funcion objetivo**
 
 max z = c_1 * x_1 + c_2 * x_2 + ... + c_n * x_n
+
 """
+
 
 
 
@@ -88,18 +86,17 @@ En este caso el objetivo es maximizar el beneficio, que viene dado por la suma d
 max z = 7x_1 + 4x_2 + 3x_3
 """
 
-
-
-problem_2 = """
-
-"""
-
-answer_2 = """
-
+resource_allocation_example = f"""
+EJEMPLO 1:
+Problema: 
+{problem_1}
+Respuesta:
+{answer_1}
 """
 
 def main() -> None:
-  main()
+  print( resource_allocation_general )
+  print( resource_allocation_example )
 
 if __name__ == '__main__':
   main()

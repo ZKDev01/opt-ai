@@ -5,6 +5,7 @@ from src.cot_opt import COT_history
 from src.tools import get_model
 
 from src.opt.mixing_problem import mixing_general, mixing_examples
+from src.opt.resource_allocation import resource_allocation_general, resource_allocation_example
 
 
 # MEJORAR EL PROMPT CON INPUT TEMPLATE Y OUTPUT TEMPLATE o PARSER de LANGCHAIN
@@ -44,21 +45,33 @@ OUTPUT:
 def input_to_apply_rag (input: str, kvalues: int = 5):
   pass
 
+
+
+
 def input_like_mixing_problem (input: str, ksolutions: int = 5) -> list[str]:
-  historial = COT_history(general=mixing_general, examples=mixing_examples)
+  historial = COT_history(
+    general = mixing_general, 
+    examples= mixing_examples)
   
   output = historial.cot_processed_problem(problem=input, kvalues=ksolutions)
-  # output = historial.send_processed_input(input=input)
-
   return output
+
+def input_like_resource_allocation (input: str, ksolutions: int = 5) -> str:
+  historial = COT_history(
+    general = resource_allocation_general, 
+    examples= resource_allocation_example)
+
+  output = historial.cot_processed_problem(problem=input, kvalues=ksolutions)
+  return output
+
+
+
+
 
 def input_like_personnel_scheduling_1 (input: str) -> str:
   pass
 
 def input_like_personnel_scheduling_2 (input: str) -> str:
-  pass
-
-def input_like_resource_allocation (input: str) -> str:
   pass
 
 

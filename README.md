@@ -18,7 +18,7 @@ Este sistema enfrenta algunas limitaciones importantes:
 
 ## Instalación del Proyecto
 
-1. Obtener una `google_api_key` que proporciona Google de forma gratuita en https://aistudio.google.com/app/apikey?hl=es-419
+1. Obtener una `google_api_key` que proporciona Google de forma gratuita en https://aistudio.google.com
 2. Instalar las dependencias del proyecto
 3. Luego ejecutarlo con `streamlit run deploy_streamlit.py`
 

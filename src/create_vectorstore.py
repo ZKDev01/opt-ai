@@ -167,6 +167,7 @@ class FAISS_VECTORSTORE():
           embedding=embedding
         )
         i=i+100
+        
       self.__vs.save_local(FAISS_PATH)
 
 

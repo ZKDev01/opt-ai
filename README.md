@@ -21,32 +21,3 @@ Este sistema enfrenta algunas limitaciones importantes:
 1. Obtener una `google_api_key` que proporciona Google de forma gratuita en https://aistudio.google.com
 2. Instalar las dependencias del proyecto
 3. Luego ejecutarlo con `streamlit run deploy_streamlit.py`
-
-## Diseño del Proyecto
-
-Este sería un diseño de cómo funciona el proyecto:
-
-![alt-img](assets/service-bot-3.png)
-
-### RAG
-
-RAG es un enfoque que mejora la capacidad de los LLMs para generar respuestas más precisas y relevantes al integrar información de una base de conocimientos externa durante el proceso de generación de texto. Este método permite referenciar y utilizar información que no estaba presente en los datos de entrenamiento original, lo que resulta en respuestas más contextualizadas y precisas en diversas tareas 
-
-Nuestro sistema utiliza este enfoque y está compuesto por dos componentes principales: 
-
-1. *Recuperación de información:* busca en una base de datos vectorial para encontrar contenidos relevantes que respondan a la consulta del usuario. 
-2. *Generación de respuestas:* utiliza un LLM que integra la información recuperada para sintetizar una respuesta coherente y útil al usuario
-
-![alt-img](assets/service-bot-4.png)
-
-### Chat History y Técnicas de Ingeniería de Prompts
-
-Chat History establece el marco para que el LLM comprenda el formato esperado de la pregunta y la respuesta.
-
-A continuación se muestra una idea del diseño interno para generar y analizar las propuestas que genera el LLM usando una combinación te técnicas de ingeniería de prompts 
-
-![alt-img](assets/service-bot-2.png)
-
-La siguiente imagen es la idea del diseño externo del analizador y generador de propuestas para los problemas de optimización. En esta se puede ver que antes de pasar a analizar el problema de optimización, primero se clasifica el problema de optimización, en alguno que ya este definido anteriormente. Este clasificador es un LLM sin la característica de Chat History y toma todos los modelos de diferentes problemas de optimización y retorna el modelo que más puede acercarse a ser una respuesta del problema de optimización inicial.
-
-![alt-img](assets/service-bot-1.png)

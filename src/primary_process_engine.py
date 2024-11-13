@@ -4,9 +4,9 @@ from src.chat_history import BaseHistory
 from src.cot_opt import COT_history
 from src.tools import get_model
 
-from src.opt.mixing_problem import mixing_general, mixing_examples
-from src.opt.resource_allocation import resource_allocation_general, resource_allocation_example
-from src.opt.personnel_scheduling_1 import personnel_scheduling_general
+from opt_problems.mixing_problem import mixing_general, mixing_examples
+from opt_problems.resource_allocation import resource_allocation_general, resource_allocation_example
+from opt_problems.personnel_scheduling_1 import personnel_scheduling_general
 
 
 

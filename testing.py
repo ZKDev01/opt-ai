@@ -5,7 +5,7 @@ from src.chat_history import BaseHistory
 from src.tools import get_model
 from src.primary_process_engine import input_to_apply_rag, input_like_mixing_problem, input_like_resource_allocation
 
-from src.opt.mixing_problem import mixing_general, mixing_examples
+from opt_problems.mixing_problem import mixing_general, mixing_examples
 
 def testing_rag() -> str:
   pass

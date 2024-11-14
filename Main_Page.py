@@ -1,9 +1,15 @@
 import streamlit as st 
 
 
+st.set_page_config(
+  page_title='Service Bot',
+  layout='wide'
+)
+
+
 about = """
-- Resolver Problemas de Optimizacion 
-- Permite preguntar sobre el contenido de un documento pdf
+- Resolver problemas de optimización 
+- Responder a preguntas sobre datos no estructurados como videos e imágenes
 """
 
 def main ( ) -> None:

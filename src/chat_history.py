@@ -1,48 +1,45 @@
-from src.tools import get_model, get_embedding
-from src.create_vectorstore import FAISS_VECTORSTORE
+from typing import (
+  Any,
+  List,
+  Dict
+)
 
-from langchain_google_genai import GoogleGenerativeAI, GoogleGenerativeAIEmbeddings
-from langchain_core.messages import HumanMessage, AIMessage
-from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
+from src.core import (
+  get_model,
+  get_embedding,
+  prompt_template_QA
+)
 
+from langchain_google_genai import (
+  GoogleGenerativeAI,
+  GoogleGenerativeAIEmbeddings
+)
 
-
-class BaseHistory():
-  
-
-
-  def __init__(self, with_vectorstore: bool = True) -> None:
-    self.model: GoogleGenerativeAI = get_model()
-    self.embedding: GoogleGenerativeAIEmbeddings = get_embedding()
-    self.chat: list = []
-    self.prompt = """
-    Eres un asistente, capaz de responder detalladamente las respuestas que se te hagan
-    Tambien debes tener conocimiento sobre la conversacion que tengas con el usuario
-    """
-    if with_vectorstore: self.vectorstore = FAISS_VECTORSTORE(load=True)  
-
-
-
-  def make_chain(self) -> None:
-    self.prompt = ChatPromptTemplate.from_messages([
-      ('system', f'{self.prompt}'),
-      MessagesPlaceholder(variable_name='chat'),
-      ('human', '{input}')
-    ])
-    self.chain = self.prompt | self.model
+from langchain_core.messages import (
+  HumanMessage,
+  AIMessage
+)
+from langchain_core.prompts import (
+  ChatPromptTemplate,
+  MessagesPlaceholder
+)
+from langchain_core.output_parsers import (
+  JsonOutputParser
+)
 
 
 
-  def clean_history(self) -> None:
-    self.chat: list = []
 
+class BaseHistory : 
 
+  def __init__(self) -> None:
+    pass
 
-  def send_processed_query(self, query: str) -> str:
-    response = self.chain.invoke({'input':query, 'chat':self.chat})
-    self.chat.append( HumanMessage(content=query) )
-    self.chat.append( AIMessage(content=response) )
+  def clean_history (self) -> Any:
+    return "clean history function"
 
-    return response
+  def process_query (self, query: str) -> str:
+    return prompt_template_QA (question=query, k=10, model=get_model())
+
 
 

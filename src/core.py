@@ -1,6 +1,8 @@
 import os 
 import dotenv
 
+from typing import List
+
 from langchain_google_genai import (
   GoogleGenerativeAI, 
   GoogleGenerativeAIEmbeddings
@@ -17,6 +19,17 @@ from langchain_core.pydantic_v1 import (
   BaseModel, 
   Field
 )
+
+
+
+
+
+# region: GLOBAL VAR
+current = os.getcwd()
+doc_dir = '\\database\\private'
+
+DATA_PATH = current + doc_dir
+# endregion
 
 
 
@@ -41,49 +54,50 @@ def get_embedding ( ) -> GoogleGenerativeAIEmbeddings:
 
 
 
-def prompt_template_QA(question: str, k: int, model: GoogleGenerativeAI) -> str:
+def load_documents ( ) :
+  dir_list = { dir : DATA_PATH+'\\'+dir for dir in os.listdir(DATA_PATH) }
+  return dir_list
+
+
+def load_contents_from_documents (dir_list : str, type_doc: str) :
+  content = ''
+
+  if type_doc == 'pdf':
+    pass
+
+  if type_doc == 'md':
+    pass
+
+  return content
+
+
   """
-  Este metodo construye un template de chat que incluye instrucciones claras para el modelo de IA sobre como responder 
-  a una pregunta especifica y sugerir posibles preguntas relacionadas. 
-
-  Utiliza parametro `k` para especificar la cantidad de recomendaciones de preguntas debe incluir en su respuesta
-
-  Args:
-      question (str): la pregunta especifica que se desea que el modelo responda 
-      k (int): cantidad de recomendaciones de preguntas relacionadas que se deben incluir en la respuesta 
-      model (GoogleGenerativeAI): instancia del modelo de IA utilizado para generar respuesta
-
-  Returns:
-      result (str): respuesta generada por el modelo, incluyendo tanto la respuesta directa a la pregunta como las recomendaciones de preguntas relacionadas
-      
-  """
-
-  prompt = ChatPromptTemplate.from_template(
-    """ 
-    Se lo mas simple posible para responder la siguiente pregunta 
-    y da algunas recomendaciones a preguntas que se parezcan al tema de la pregunta
-
-    Solo devuelve la respuesta. Seguido de las preguntas. Ejemplo:
-    
-    Answer
-
-    Posibles preguntas:
-    - Pregunta sugerida 1
-    - Pregunta sugerida 2
-    - Pregunta sugerida 3  
-
-    El numero de preguntas que sugieres debe estar fijado al siguiente numero:
-    Numero de recomendaciones: {k}
-
-    Q: {question}
-    A: 
-    """
-  )
   
-  chain = prompt | model 
-  result = chain.invoke(
-    {
-      "question": question,
-      "k": k
-    })
-  return result
+
+def processed_documents () -> Dict:
+  # search dir documents
+  
+
+  def load_content (doc_dir:str, format:str):
+    content = ''
+      
+    if format == 'pdf':
+      # TODO obtener img 
+      with open(doc_dir, 'r', encoding='ISO-8859-1') as file:
+        content = file.read()  
+      return content    
+    
+    if format == 'md':
+      with open(doc_dir, 'r', encoding='utf-8') as file:
+        content = file.read()
+
+      split_by_header = content.split('#')
+      split_by_header = [ c for c in split_by_header if len(c) != 0 and len(c) > 100 ]
+      return split_by_header
+  
+  chunks = [ load_content(dir, dir.split('.')[-1]) for _,dir in doc_dirs.items()]
+
+  return chunks
+
+
+  """

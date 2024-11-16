@@ -6,8 +6,7 @@ from typing import (
 
 from src.core import (
   get_model,
-  get_embedding,
-  prompt_template_QA
+  get_embedding
 )
 
 from langchain_google_genai import (
@@ -28,18 +27,40 @@ from langchain_core.output_parsers import (
 )
 
 
+PROMPT = """
+Eres un asistente virtual, capaz de responder detalladamente las preguntas que se te hagan
+Tambien puedes dar explicaciones sobre temas especificos 
+Puedes analizar la conversacion que tengas con el usuario para poder mejorar las respuestas futuras
+"""
 
 
 class BaseHistory : 
 
-  def __init__(self) -> None:
-    pass
+  def __init__(self, vectorstore:Any, prompt:str = PROMPT) -> None:
+    self.model = get_model()
+    self.embed = get_embedding()
 
-  def clean_history (self) -> Any:
-    return "clean history function"
+    self.chat:List = [ ]
+    self.prompt = ChatPromptTemplate.from_messages([
+      ('system', prompt),
+      MessagesPlaceholder(variable_name='chat'),
+      ('human', '{input}')
+    ])
+    self.chain = self.prompt | self.model 
+    self.vectorstore = vectorstore
 
-  def process_query (self, query: str) -> str:
-    return prompt_template_QA (question=query, k=10, model=get_model())
+
+  def clean_history (self) -> None:
+    self.chat:List = [ ]
+
+  def process_query (self, query:str) -> str:
+    response = self.chain.invoke({
+      'input': query,
+      'chat' : self.chat
+    })
+    self.chat.append ( HumanMessage(content=query) )
+    self.chat.append ( AIMessage(content=response) )
+    return response
 
 
 

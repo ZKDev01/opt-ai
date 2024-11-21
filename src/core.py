@@ -1,11 +1,20 @@
 import os 
+import io
+import fitz
 import dotenv
+import PyPDF2
+import base64
 
+
+from PIL import Image
 from typing import List
 
 from langchain_google_genai import (
   GoogleGenerativeAI, 
   GoogleGenerativeAIEmbeddings
+)
+from langchain_core.documents import (
+  Document
 )
 from langchain_core.output_parsers import (
   StrOutputParser,
@@ -19,16 +28,26 @@ from langchain_core.pydantic_v1 import (
   BaseModel, 
   Field
 )
-
-
+from langchain_text_splitters import (
+  RecursiveCharacterTextSplitter
+)
+from langchain_community.document_loaders import (
+  PyPDFLoader
+)
 
 
 
 # region: GLOBAL VAR
 current = os.getcwd()
 doc_dir = '\\database\\private'
+faiss_dir = '\\faiss\\'
 
-DATA_PATH = current + doc_dir
+DATA_PATH = current + doc_dir + "\\"
+
+CHUNK_SIZE = 1024
+CHUNK_OVERLAP = CHUNK_SIZE//10
+
+FAISS_PATH = current + faiss_dir
 # endregion
 
 
@@ -59,45 +78,34 @@ def load_documents ( ) :
   return dir_list
 
 
-def load_contents_from_documents (dir_list : str, type_doc: str) :
-  content = ''
+def load_contents_from_documents (dir_doc : str, type_doc: str) -> List[Document] :
+  dir_doc = DATA_PATH + dir_doc
 
   if type_doc == 'pdf':
-    pass
+    loader = PyPDFLoader(dir_doc,extract_images=False)
+    pages = loader.load_and_split()
+    return pages
 
   if type_doc == 'md':
-    pass
+    with open(dir_doc, 'r', encoding='utf-8') as file:
+      content = file.read()
 
-  return content
+    split_by_header = content.split('#')
+    split_by_header: List[Document] = [ Document(c) for c in split_by_header if len(c) != 0 ]
+    return split_by_header
 
-
-  """
-  
-
-def processed_documents () -> Dict:
-  # search dir documents
-  
-
-  def load_content (doc_dir:str, format:str):
-    content = ''
-      
-    if format == 'pdf':
-      # TODO obtener img 
-      with open(doc_dir, 'r', encoding='ISO-8859-1') as file:
-        content = file.read()  
-      return content    
-    
-    if format == 'md':
-      with open(doc_dir, 'r', encoding='utf-8') as file:
-        content = file.read()
-
-      split_by_header = content.split('#')
-      split_by_header = [ c for c in split_by_header if len(c) != 0 and len(c) > 100 ]
-      return split_by_header
-  
-  chunks = [ load_content(dir, dir.split('.')[-1]) for _,dir in doc_dirs.items()]
-
-  return chunks
+  raise Exception("formato de documento no reconocido")
 
 
-  """
+def pdf_page_to_base64 (pdf_path:str, page_number:int):
+  pdf_document = fitz.open(pdf_path)
+  page = pdf_document.load_page(page_number)
+  pix = page.get_pixmap()
+  img = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)
+
+  buffer = io.BytesIO()
+  img.save(buffer, format="PNG")
+
+  base64_image = base64.b64encode(buffer.getvalue()).decode("utf-8")
+  return base64_image
+

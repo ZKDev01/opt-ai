@@ -2,3 +2,4 @@ src/.env
 faiss/
 experimental/*
 database/private/*
+__pycache__/

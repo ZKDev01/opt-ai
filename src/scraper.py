@@ -15,7 +15,7 @@ class Scraper:
   def create_vectorstore (self) -> Any:
     # TODO 1. Extract the paragraphs
 
-    # TODO 2. Create a vectorstore with the paragraphs 
+    # TODO 2. Create a vectorstore with the paragraphs like chunks
 
     # TODO 3. Return the vectorstore
     pass

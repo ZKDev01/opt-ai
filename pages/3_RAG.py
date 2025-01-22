@@ -1,16 +1,17 @@
 import os 
 import streamlit as st 
 
-from src.chat_history import (
-  BaseHistory 
-)
+from src.chat_history import BaseHistory 
 from src.vectorstore import FAISS_VECTORSTORE
 from src.core import FAISS_PATH
 
-# Buscar las bases de datos creadas de faiss
+
+
+
+# 1. Buscar las bases de datos creadas de faiss
 vs_dirs = [ FAISS_PATH + element for element in os.listdir(FAISS_PATH) ]
 
-# Mostrarlas y recopilar datos
+# 2. Mostrarlas y recopilar datos
 opt = st.multiselect(
   label='Seleccion de base de datos vectorial',
   options=vs_dirs
@@ -27,8 +28,8 @@ k = st.number_input(
 
 btn = st.button ("Process")
 
-# aplicar una busqueda de similitud 
-# TODO: Aplicar LLM + Result 
+# 3. Aplicar una busqueda de similitud 
+# 4. Aplicar LLM + Result 
 
 if btn:
   for vs_dir in opt:

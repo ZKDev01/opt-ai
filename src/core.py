@@ -52,9 +52,10 @@ FAISS_PATH = current + faiss_dir
 
 
 
-def load_env ( ) :
+def load_env ( ) -> str:
   dotenv.load_dotenv ( )
-  os.environ.setdefault('google_api_key', os.getenv('google_api_key'))
+  api_key = os.environ.setdefault('google_api_key', os.getenv('google_api_key'))
+  return api_key
 
 def get_model ( ) -> GoogleGenerativeAI:
   load_env ( )

@@ -3,3 +3,4 @@ faiss/
 experimental/*
 database/private/*
 __pycache__/
+env

@@ -9,7 +9,6 @@ st.set_page_config(
 
 about = """
 - Resolver problemas de optimización 
-- Responder a preguntas sobre datos no estructurados como videos e imágenes
 """
 
 def main ( ) -> None:

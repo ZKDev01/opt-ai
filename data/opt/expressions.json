@@ -1,0 +1,50 @@
+{
+  "expressions" : [
+    {
+      "expression" : "2*x1 + 3*x2 - 2*x3 >= 8",
+      "values": {
+        "x1" : 1,
+        "x2" : 2,
+        "x3" : 0
+      }
+    },
+    {
+      "expression" : "2*x1 + 3*x2 - 2*x3 >= 8",
+      "values": {
+        "x1" : 0,
+        "x2" : 0,
+        "x3" : 0
+      }
+    },
+    {
+      "expression" : "x1 - x2 - x3 >= 3",
+      "values": {
+        "x1" : 0,
+        "x2" : 2,
+        "x3" : 1
+      }
+    },
+    {
+      "expression" : "x1 - x2 - x3 >= 3",
+      "values": {
+        "x1" : 3,
+        "x2" : 0,
+        "x3" : 0
+      }
+    },
+    {
+      "expression" : "5*x2 - x3 >= 5",
+      "values": {
+        "x2" : 0,
+        "x3" : 5
+      }
+    },
+    {
+      "expression" : "5*x2 - x3 >= 5",
+      "values": {
+        "x2" : 2,
+        "x3" : 5
+      }
+    }
+  ] 
+}

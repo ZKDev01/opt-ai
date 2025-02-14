@@ -1,0 +1,47 @@
+{
+  "models": [
+    {
+      "variables": [
+        "x1",
+        "x2",
+        "x3"
+      ],
+      "objetive_function": "max 2*x1 + 3*x2",
+      "constraints": [
+        "x1 + x2 <= 3",
+        "x1 + 2*x2 <= 4",
+        "-x1 + x2 <= 1",
+        "x1 >= 0",
+        "x2 >= 0"
+      ],
+      "standard_form_model": {
+        "variables": [
+          "x1",
+          "x2",
+          "x3",
+          "h1",
+          "h2",
+          "h3"
+        ],
+        "objetive_function": "min -2*x1 - 3*x2",
+        "constraints": [
+          "x1 + x2 + h1 = 3",
+          "x1 + 2*x2 + h2 = 4",
+          "-x1 + x2 + h3 = 1",
+          "x1 >= 0",
+          "x2 >= 0",
+          "h1 >= 0",
+          "h2 >= 0",
+          "h3 >= 0"
+        ]
+      },
+      "possible_basic_feasible_solutions": [
+        [
+          "h1",
+          "h2",
+          "h3"
+        ]
+      ]
+    }
+  ]
+}

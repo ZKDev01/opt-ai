@@ -1,0 +1,14 @@
+{
+  "solver" : {
+    "title" : "basic-solver",
+    "description" : "",
+    "type" : "object",
+    "properties" : {
+      "solution": {
+        "type": "string",
+        "description": "..."
+      }
+    },
+    "required": ["solution"]
+  }
+}

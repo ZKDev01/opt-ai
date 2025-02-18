@@ -1,7 +1,5 @@
-from math import exp
 from typing import List,Dict
 
-from sklearn.utils import resample
 
 
 class MathModel :
@@ -9,8 +7,8 @@ class MathModel :
       variables:List[str],
       objetive_function:str,
       constraints:List[str],
-      standard_form_model:Dict[str,str|List[str]],
-      possible_basic_feasible_solutions:List[List[str]]
+      standard_form_model:Dict[str,str|List[str]] = {},
+      possible_basic_feasible_solutions:List[List[str]] = []
     ) -> None:
 
     self.variables = variables
@@ -20,8 +18,8 @@ class MathModel :
     self.possible_basic_feasible_solutions = possible_basic_feasible_solutions
 
   def __repr__(self) -> str:
-    return "MathModel(variables={}, objetive_function={}, constraints={}, standard_form_model={}, possible_basic_feasible_solutions={})".format(
-      self.variables, self.objetive_function, self.constraints, self.standard_form_model, self.possible_basic_feasible_solutions
+    return "MathModel(variables={}, objetive_function={}, constraints={})".format(
+      self.variables, self.objetive_function, self.constraints
     )
 
 
@@ -35,7 +33,7 @@ class Expression :
     self.values:Dict[str,float] = values
 
   def __repr__(self):
-    return "Expression(expression={}, values={}, evaluation={})".format(
+    return "{} con {} se tiene evaluation={}".format(
       self.expression,self.values,self.evaluate()
     )
 
@@ -51,13 +49,3 @@ class Expression :
       print(f"Error evaluating expression: {e}")
       return False
 
-""" 
-
-class Expression :
-  def __init__(self, expression:str, values:Dict[str,float] ,evaluation:bool):
-    self.expression:str = expression
-    self.values:Dict[str,float] = values
-    self.evaluation:bool = evaluation
-
-
-"""

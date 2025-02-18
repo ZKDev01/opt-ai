@@ -1,14 +1,15 @@
 {
-  "solver" : {
-    "title" : "basic-solver",
-    "description" : "",
+  "meta-basic-solver" : {
+    "title" : "basic-feasible-solutions-finder",
+    "description" : "Los problemas de programacion lineal tienen soluciones factibles basicas. Una solucion factible basica es una asignacion de valores a las variables del problema capaces de cumplir con todas las restricciones del problema. El objetivo es devolver una solucion basica factible del problema. Para evitar errores de asignacion a las variables del problema de entrada se muestran las siguientes restricciones y posibles evaluaciones {} Estas deben servir de ayudar para razonar una solucion basica factible",
     "type" : "object",
     "properties" : {
       "solution": {
         "type": "string",
-        "description": "..."
+        "description": "Variables de decision y posibles valores o asignaciones, que cumplen todas las restricciones del modelo matematico de la entrada. Esta asignacion (la salida) debe ser del tipo Dict[str,float]. A partir de muchos intentos fallidos se tienen las siguientes asignaciones pero no son factibles, por lo tanto, debes evitar devolver estas {}. Para mejor garantiza que la solucion sea factible, se capaz de razonar si la solucion propuesta es factible (no es necesario que devuelvas el razonamiento). La respuesta debe ser unica con respecto a las propuestas anteriores" 
       }
     },
     "required": ["solution"]
   }
 }
+

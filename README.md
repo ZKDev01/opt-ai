@@ -1,4 +1,4 @@
-# Service-Bot 
+# Optimization Bot
 
 ## Descripción del Proyecto. Objetivos y Limitaciones
 
